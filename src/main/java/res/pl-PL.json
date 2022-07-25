@@ -1,0 +1,17 @@
+{
+  "button.register_operation": "Zaksięguj operację",
+  "category.other": "Pozostałe",
+  "dialog.operation_details": "Wprowadź szczegóły operacji",
+  "label.card.accounting_balance": "Saldo księgowe",
+  "label.card.available_balance": "Dostępne saldo",
+  "label.card.cash": "Gotówka",
+  "label.card.pending": "Oczekujące",
+  "label.card.savings": "Oszczędności",
+  "label.card.total_balance": "Saldo całkowite",
+  "label.tab.history": "Historia operacji",
+  "label.tab.home": "Strona główna",
+  "label.tab.invoices": "Rachunki",
+  "label.tab.pending": "Operacje oczekujące",
+  "label.tooltip.search": "Wyszukaj...",
+  "type.other": "Inny"
+}
