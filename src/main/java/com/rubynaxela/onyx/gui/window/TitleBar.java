@@ -12,11 +12,12 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 
 /**
- * Represents the window title bar containing the title label and window control buttons.
+ * Represents a window title bar containing the title label and window control buttons.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class TitleBar extends JPanel implements PressAndReleaseListener, MouseDragListener {
 
-    private final JFrame window;
+    private final Window window;
     private final JPanel buttons;
     private final TitleBarButton close, minimize;
     private final JLabel title;
@@ -27,11 +28,10 @@ public class TitleBar extends JPanel implements PressAndReleaseListener, MouseDr
      *
      * @param window reference to the window
      */
-    public TitleBar(@NotNull JFrame window) {
+    public TitleBar(@NotNull Window window) {
 
         this.window = window;
         setBackground(new Color(0, 0, 0, 128));
-        setPreferredSize(new Dimension(1152, 28));
         setLayout(new BorderLayout());
 
         final var layout = new FlowLayout(FlowLayout.LEFT);
@@ -39,21 +39,30 @@ public class TitleBar extends JPanel implements PressAndReleaseListener, MouseDr
         layout.setVgap(10);
         buttons = new JPanel();
         buttons.setLayout(layout);
-        buttons.add(close = new TitleBarButton(Colors.MACOS_RED));
-        buttons.add(minimize = new TitleBarButton(Colors.MACOS_YELLOW));
         buttons.setBackground(Colors.TRANSPARENT);
+
+        close = new TitleBarButton(Colors.MACOS_RED);
+        if (window instanceof Frame) close.addClickListener(e -> System.exit(0));
+        else if (window instanceof final Dialog dialog) close.addClickListener(e -> dialog.dispose());
+        buttons.add(close);
+
+        minimize = new TitleBarButton(Colors.MACOS_YELLOW);
+        if (window instanceof final JFrame frame) {
+            minimize.addClickListener(e -> frame.setState(JFrame.ICONIFIED));
+            buttons.add(minimize);
+        }
+
         add(buttons, BorderLayout.WEST);
 
-        title = new JLabel(window.getTitle());
+        title = new JLabel();
+        if (window instanceof final Frame frame) title.setText(frame.getTitle());
+        else if (window instanceof final Dialog dialog) title.setText(dialog.getTitle());
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setFont(title.getFont().deriveFont(Font.BOLD));
         add(title, BorderLayout.CENTER);
 
         addMouseListener(this);
         addMouseMotionListener(this);
-
-        close.addClickListener(e -> System.exit(0));
-        minimize.addClickListener(e -> window.setState(JFrame.ICONIFIED));
     }
 
     @Override
