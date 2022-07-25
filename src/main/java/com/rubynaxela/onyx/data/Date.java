@@ -20,6 +20,10 @@ public class Date {
         return new Date(LocalDate.parse(date, DATE_FORMAT));
     }
 
+    public static Date today() {
+        return new Date(LocalDate.now());
+    }
+
     public int getYear() {
         return data.get(ChronoField.YEAR);
     }
