@@ -3,10 +3,10 @@ package com.rubynaxela.onyx.data;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Vector;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("ClassCanBeRecord")
@@ -15,10 +15,10 @@ public class Operation {
     private final Date date;
     private final int ordinalInWeek;
     private final String contractor;
-    private final List<Fragment> fragments;
+    private final Vector<Fragment> fragments;
 
     public Operation(@NotNull Date date, int ordinalInWeek,
-                     @NotNull String contractor, @NotNull List<@NotNull Fragment> fragments) {
+                     @NotNull String contractor, @NotNull Vector<@NotNull Fragment> fragments) {
         this.date = date;
         this.ordinalInWeek = ordinalInWeek;
         this.contractor = contractor;
@@ -27,7 +27,7 @@ public class Operation {
 
     public static Operation from(@NotNull Raw operation) {
         return new Operation(Date.valueOf(operation.date), operation.ordinalInWeek, operation.contractor,
-                             new ArrayList<>(Arrays.stream(operation.fragments).map(Fragment::from).toList()));
+                             new Vector<>(Arrays.stream(operation.fragments).map(Fragment::from).toList()));
     }
 
     public Raw raw() {
@@ -40,14 +40,18 @@ public class Operation {
         return date;
     }
 
+    public int getOrdinalInWeek() {
+        return ordinalInWeek;
+    }
+
     @NotNull
     public String getContractor() {
         return contractor;
     }
 
     @NotNull
-    public List<Fragment> getFragments() {
-        return Collections.unmodifiableList(fragments);
+    public Vector<Fragment> getFragments() {
+        return fragments;
     }
 
     public Monetary wGetTotalAmount() {
@@ -75,9 +79,9 @@ public class Operation {
 
         private final Type type;
         private final String description;
-        private final List<Branch> branches;
+        private final Vector<Branch> branches;
 
-        public Fragment(@NotNull Type type, @NotNull String description, @NotNull List<@NotNull Branch> branches) {
+        public Fragment(@NotNull Type type, @NotNull String description, @NotNull Vector<@NotNull Branch> branches) {
             this.type = type;
             this.description = description;
             this.branches = branches;
@@ -85,7 +89,7 @@ public class Operation {
 
         public static Fragment from(@NotNull Raw.Fragment fragment) {
             return new Fragment(Type.valueOf(fragment.type.toUpperCase()), fragment.description,
-                                new ArrayList<>(Arrays.stream(fragment.branches).map(Branch::from).toList()));
+                                new Vector<>(Arrays.stream(fragment.branches).map(Branch::from).toList()));
         }
 
         public Raw.Fragment raw() {
@@ -104,8 +108,8 @@ public class Operation {
         }
 
         @NotNull
-        public List<Branch> getBranches() {
-            return Collections.unmodifiableList(branches);
+        public Vector<Branch> getBranches() {
+            return branches;
         }
     }
 
