@@ -14,6 +14,7 @@ import java.awt.geom.RoundRectangle2D;
 /**
  * Represents application window structure.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class MainWindow extends JFrame {
 
     public static final int WIDTH = 1152, HEIGHT = 796;
@@ -59,7 +60,6 @@ public class MainWindow extends JFrame {
                 newTab.addToContainer(this, BorderLayout.CENTER);
                 revalidate();
                 repaint();
-                System.out.println("Switched to " + tab);
             }
         };
 
