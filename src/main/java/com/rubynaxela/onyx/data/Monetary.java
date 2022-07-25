@@ -80,13 +80,9 @@ public class Monetary implements Comparable<Monetary> {
             decimalPlaces -= 100;
             units++;
         }
-        while (decimalPlaces < 0) {
+        while (decimalPlaces <= -100) {
             decimalPlaces += 100;
             units--;
-        }
-        if (units < 0) {
-            decimalPlaces -= 100;
-            units++;
         }
     }
 
