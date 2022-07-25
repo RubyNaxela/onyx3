@@ -1,0 +1,47 @@
+{
+  "cash": 0.0,
+  "savings": 4158.72,
+  "operations": [
+    {
+      "d": "2022/07/24",
+      "c": "Test",
+      "o": 0,
+      "f": [
+        {
+          "t": "other",
+          "d": "Test description",
+          "b": [
+            {
+              "c": "food",
+              "a": -50.0
+            }
+          ]
+        }
+      ]
+    }, {
+      "d": "2022/07/24",
+      "c": "Test",
+      "o": 1,
+      "f": [
+        {
+          "t": "other",
+          "d": "Test description",
+          "b": [
+            {
+              "c": "other",
+              "a": 50.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "initial_amount": 2305.3,
+  "pending_operations": [
+    {
+      "contractor": "Test",
+      "description": "Jakiś opis",
+      "amount": 1617.89
+    }
+  ]
+}
