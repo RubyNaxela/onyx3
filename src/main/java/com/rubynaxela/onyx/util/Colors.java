@@ -25,6 +25,8 @@ public final class Colors {
     public static Color LOGO_LIGHT_GRAY = new Color(224, 224, 224);
     public static Color LOGO_LIGHT_GRAY_SHADE = new Color(160, 160, 160);
     public static Color LOGO_DARK_GRAY = new Color(32, 32, 32);
+    public static Color INCOME_COLOR = new Color(186, 86, 246);
+    public static Color EXPENSE_COLOR = new Color(255, 97, 177);
 
     private Colors() {
     }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("ClassCanBeRecord")
 public class Operation {
@@ -66,6 +67,10 @@ public class Operation {
                String.format("%02d", date.getWeekOfYear()) + String.format("%02x", ordinalInWeek);
     }
 
+    public String wGetDescription() {
+        return fragments.stream().map(Fragment::getDescription).collect(Collectors.joining("\n"));
+    }
+
     public static class Fragment {
 
         private final Type type;
@@ -86,6 +91,11 @@ public class Operation {
         public Raw.Fragment raw() {
             return new Raw.Fragment(type.toString().toLowerCase(), description,
                                     branches.stream().map(Branch::raw).toArray(Raw.Branch[]::new));
+        }
+
+        @NotNull
+        public Type getType() {
+            return type;
         }
 
         @NotNull
