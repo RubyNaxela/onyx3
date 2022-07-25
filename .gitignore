@@ -1,6 +1,7 @@
 # Project exclude paths
 /.gradle/
-/build/
-/build/classes/java/main/
+/build/classes/java/main/com/
+/build/generated/
+/build/tmp/
 /.idea/
 .DS_Store
