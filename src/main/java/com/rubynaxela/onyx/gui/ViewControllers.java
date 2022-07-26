@@ -10,6 +10,7 @@ public final class ViewControllers {
 
     public static Consumer<@NotNull Monetary> AVAILABLE_BALANCE, CASH, SAVINGS, PENDING_OPERATIONS, TOTAL_BALANCE;
     public static Consumer<MainWindow.@NotNull Tab> SWITCH_TAB;
+    public static Runnable REFRESH_OPERATIONS_LIST;
 
     private ViewControllers() {
     }

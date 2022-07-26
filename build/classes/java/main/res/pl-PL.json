@@ -1,17 +1,22 @@
 {
   "button.register_operation": "Zaksięguj operację",
   "category.other": "Pozostałe",
-  "dialog.operation_details": "Wprowadź szczegóły operacji",
+  "form.other": "Inna",
   "label.card.accounting_balance": "Saldo księgowe",
   "label.card.available_balance": "Dostępne saldo",
   "label.card.cash": "Gotówka",
   "label.card.pending": "Oczekujące",
   "label.card.savings": "Oszczędności",
   "label.card.total_balance": "Saldo całkowite",
+  "label.common.contractor": "Kontrahent",
+  "label.common.date": "Data",
+  "label.dialog.fragments": "Fragmenty",
+  "label.dialog.operation_details": "Wprowadź szczegóły operacji",
+  "label.dialog.ordinal_in_week": "Nr w tygodniu",
   "label.tab.history": "Historia operacji",
   "label.tab.home": "Strona główna",
   "label.tab.invoices": "Rachunki",
   "label.tab.pending": "Operacje oczekujące",
   "label.tooltip.search": "Wyszukaj...",
-  "form.other": "Inna"
+  "title.dialog.new_operation": "Nowa operacja"
 }

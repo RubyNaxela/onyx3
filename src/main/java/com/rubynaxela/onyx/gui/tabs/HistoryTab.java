@@ -3,10 +3,12 @@ package com.rubynaxela.onyx.gui.tabs;
 import com.rubynaxela.onyx.data.Database;
 import com.rubynaxela.onyx.data.Operation;
 import com.rubynaxela.onyx.gui.MaterialIcons;
+import com.rubynaxela.onyx.gui.ViewControllers;
 import com.rubynaxela.onyx.gui.components.HintTextField;
 import com.rubynaxela.onyx.gui.components.IconButton;
 import com.rubynaxela.onyx.gui.components.OperationListView;
 import com.rubynaxela.onyx.gui.components.OperationView;
+import com.rubynaxela.onyx.gui.dialogs.OperationDialog;
 import com.rubynaxela.onyx.io.I18n;
 import com.rubynaxela.onyx.util.ComponentUtils;
 
@@ -27,6 +29,8 @@ public class HistoryTab extends WindowTab {
         registerButton = new IconButton(I18n.getString("button.register_operation"), MaterialIcons.ADD,
                                         new Insets(8, 4, 4, 8), new Insets(0, 0, 4, 0));
         operationPreviewPanel = new OperationView();
+
+        registerButton.addActionListener(e -> new OperationDialog(null).display());
 
         add(createTopPanel(), BorderLayout.NORTH);
         add(createOperationsList(), BorderLayout.CENTER);
@@ -55,6 +59,7 @@ public class HistoryTab extends WindowTab {
         listView.setListData(operations);
         listView.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listView.addListSelectionListener(e -> operationPreviewPanel.setOperation(operations.get(e.getFirstIndex())));
+        ViewControllers.REFRESH_OPERATIONS_LIST = listView::updateUI;
         return listView;
     }
 }

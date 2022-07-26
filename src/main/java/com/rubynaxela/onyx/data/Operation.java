@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
@@ -77,12 +75,12 @@ public class Operation {
 
     public static class Fragment {
 
-        private final Type type;
+        private final Form form;
         private final String description;
         private final Vector<Branch> branches;
 
-        public Fragment(@NotNull Type type, @NotNull String description, @NotNull Vector<@NotNull Branch> branches) {
-            this.type = type;
+        public Fragment(@NotNull Form form, @NotNull String description, @NotNull Vector<@NotNull Branch> branches) {
+            this.form = form;
             this.description = description;
             this.branches = branches;
         }
@@ -93,13 +91,13 @@ public class Operation {
         }
 
         public Raw.Fragment raw() {
-            return new Raw.Fragment(type.toString().toLowerCase(), description,
+            return new Raw.Fragment(form.toString().toLowerCase(), description,
                                     branches.stream().map(Branch::raw).toArray(Raw.Branch[]::new));
         }
 
         @NotNull
-        public Type getType() {
-            return type;
+        public Form getType() {
+            return form;
         }
 
         @NotNull
