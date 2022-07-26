@@ -88,7 +88,7 @@ public class Operation {
         }
 
         public static Fragment from(@NotNull Raw.Fragment fragment) {
-            return new Fragment(Type.valueOf(fragment.type.toUpperCase()), fragment.description,
+            return new Fragment(Form.valueOf(fragment.form.toUpperCase()), fragment.description,
                                 new Vector<>(Arrays.stream(fragment.branches).map(Branch::from).toList()));
         }
 
@@ -166,8 +166,8 @@ public class Operation {
 
         static class Fragment {
 
-            @JsonProperty("t")
-            public String type;
+            @JsonProperty("f")
+            public String form;
             @JsonProperty("d")
             public String description;
             @JsonProperty("b")
@@ -176,8 +176,8 @@ public class Operation {
             public Fragment() {
             }
 
-            public Fragment(@NotNull String type, @NotNull String description, @NotNull Branch @NotNull [] branches) {
-                this.type = type;
+            public Fragment(@NotNull String form, @NotNull String description, @NotNull Branch @NotNull [] branches) {
+                this.form = form;
                 this.description = description;
                 this.branches = branches;
             }

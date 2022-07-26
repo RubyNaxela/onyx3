@@ -5,13 +5,13 @@ import com.rubynaxela.onyx.io.I18n;
 import jiconfont.IconCode;
 import org.jetbrains.annotations.NotNull;
 
-public enum Type {
+public enum Form {
 
     OTHER(MaterialIcons.GRID_VIEW);
 
     public final IconCode icon;
 
-    Type(@NotNull IconCode icon) {
+    Form(@NotNull IconCode icon) {
         this.icon = icon;
     }
 
