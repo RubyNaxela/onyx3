@@ -39,6 +39,19 @@ public class Monetary implements Comparable<Monetary> {
     }
 
     /**
+     * Parses the argument as {@code double} and creates a new {@code Monetary}
+     * object representing the amount of money equal to the parsed number.
+     *
+     * @param amount the amount of money to parse
+     * @return a {@code Monetary} object representing the amount of money
+     */
+    @NotNull
+    @Contract(value = "_ -> new", pure = true)
+    public static Monetary valueOf(@NotNull String amount) {
+        return new Monetary(Double.parseDouble(amount));
+    }
+
+    /**
      * Adds two {@code Monetary} objects and returns the result.
      *
      * @param a the first amount
