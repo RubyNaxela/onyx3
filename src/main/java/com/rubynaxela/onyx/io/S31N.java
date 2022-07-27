@@ -15,7 +15,7 @@ import java.io.InputStream;
 public final class S31N {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final ObjectWriter WRITER = MAPPER.writerWithDefaultPrettyPrinter();
+    private static final ObjectWriter WRITER = MAPPER.writer/*WithDefaultPrettyPrinter*/();
     private static final ObjectReader READER = MAPPER.reader();
 
     private S31N() {
