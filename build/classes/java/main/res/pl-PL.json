@@ -1,4 +1,5 @@
 {
+  "button.add": "Dodaj",
   "button.register_operation": "Zaksięguj operację",
   "category.bank_charges_and_interests": "Opł. bank. i odsetki",
   "category.beverages": "Napoje",
@@ -42,7 +43,9 @@
   "label.common.contractor": "Kontrahent",
   "label.common.category": "Kategoria",
   "label.common.date": "Data",
+  "label.common.description": "Opis",
   "label.common.form": "Forma",
+  "label.dialog.categories": "Kategorie",
   "label.dialog.fragments": "Fragmenty",
   "label.dialog.operation_details": "Wprowadź szczegóły operacji",
   "label.dialog.ordinal_in_week": "Nr w tygodniu",

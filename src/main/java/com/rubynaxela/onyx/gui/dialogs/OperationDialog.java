@@ -1,8 +1,13 @@
 package com.rubynaxela.onyx.gui.dialogs;
 
 import com.rubynaxela.onyx.data.*;
+import com.rubynaxela.onyx.gui.MaterialIcons;
 import com.rubynaxela.onyx.gui.ViewControllers;
+import com.rubynaxela.onyx.gui.components.Card;
+import com.rubynaxela.onyx.gui.components.IconButton;
 import com.rubynaxela.onyx.io.I18n;
+import com.rubynaxela.onyx.util.CommonUtils;
+import com.rubynaxela.onyx.util.ComponentUtils;
 import com.rubynaxela.onyx.util.OptionalGetter;
 import com.rubynaxela.onyx.util.VectorConstr;
 import org.jetbrains.annotations.Nullable;
@@ -10,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Objects;
 
 import static com.rubynaxela.onyx.gui.GridBagConstraintsBuilder.gbc;
@@ -31,7 +37,9 @@ public class OperationDialog extends Dialog {
     }
 
     private void addFragmentPanel(@Nullable Operation.Fragment fragment) {
-        fragmentsPanel.add(new FragmentPanel(fragment));
+        final var panel = new FragmentPanel(fragment);
+        fragmentsPanel.add(panel);
+        fragmentsPanel.setBackground(panel.getColor());
         pack();
         setLocationRelativeTo(null);
         revalidate();
@@ -61,9 +69,15 @@ public class OperationDialog extends Dialog {
         contractorField.setText(operation.get(Operation::getContractor).orElse(""));
         panel.add(contractorField, gbc().row(2).column(1).width(3).fill(GridBagConstraints.HORIZONTAL).build());
 
-        panel.add(new JLabel(I18n.getString("label.dialog.fragments")), gbc().row(3).width(4)
-                                                                             .fill(GridBagConstraints.HORIZONTAL).build());
+        panel.add(new JLabel(I18n.getString("label.dialog.fragments")), gbc().row(3).width(4).build());
+        final var addFragmentButton = new IconButton(I18n.getString("button.add"), MaterialIcons.ADD,
+                                                     new Insets(2, 8, 2, 12), CommonUtils.insetBottom(2));
+        ComponentUtils.setFontSize(addFragmentButton, 12f);
+        addFragmentButton.setIconSize(16f);
+        addFragmentButton.addActionListener(e -> addFragmentPanel(null));
+        panel.add(addFragmentButton, gbc().row(3).column(2).width(2).anchor(GridBagConstraints.EAST).build());
 
+        fragmentsPanel.setLayout(new BoxLayout(fragmentsPanel, BoxLayout.Y_AXIS));
         panel.add(fragmentsPanel, gbc().row(4).width(4).fill(GridBagConstraints.HORIZONTAL).build());
         operation.get(Operation::getFragments).orElse(VectorConstr.of((Operation.Fragment) null))
                  .forEach(this::addFragmentPanel);
@@ -83,16 +97,18 @@ public class OperationDialog extends Dialog {
         }
     }
 
-    private static class BranchPanel extends JPanel {
+    private static class BranchPanel extends Card {
 
-        private final JTextField categoryField;
+        private final JComboBox<Category> categorySelector;
         private final JTextField amountField;
         private final OptionalGetter<Operation.Branch> branch;
 
         public BranchPanel(@Nullable Operation.Branch branch) {
-            super(new GridBagLayout());
+            super(new GridBagLayout(), 4);
+            ComponentUtils.addMargin(this, 4, 0, 0, 0);
             this.branch = OptionalGetter.of(branch);
-            this.categoryField = new JTextField();
+            this.categorySelector = new JComboBox<>(CommonUtils.sortedCopy(Category.values(), Category[]::new,
+                                                                           Comparator.comparing(I18n::getString)));
             this.amountField = new JTextField();
             fillData();
         }
@@ -102,52 +118,77 @@ public class OperationDialog extends Dialog {
             final var categoryLabel = new JLabel(I18n.getString("label.common.category"));
             categoryLabel.setHorizontalAlignment(SwingConstants.RIGHT);
             add(categoryLabel, gbc().fill(GridBagConstraints.HORIZONTAL).build());
-            categoryField.setText(I18n.getString(branch.get(Operation.Branch::getCategory).orElse(Category.OTHER)).toLowerCase());
-            add(categoryField, gbc().column(1).fill(GridBagConstraints.HORIZONTAL).build());
+            categorySelector.setRenderer((list, value, index, isSelected, cellHasFocus) -> value.view);
+            categorySelector.setSelectedItem(branch.get(Operation.Branch::getCategory).orElse(Category.OTHER));
+            add(categorySelector, gbc().column(1).width(2).fill(GridBagConstraints.HORIZONTAL).build());
 
             final var amountLabel = new JLabel(I18n.getString("label.common.amount"));
             add(amountLabel, gbc().row(1).fill(GridBagConstraints.HORIZONTAL).build());
             amountField.setText(branch.get(Operation.Branch::getAmount).orElse(Monetary.ZERO).toString(""));
             amountField.setHorizontalAlignment(SwingConstants.RIGHT);
             add(amountField, gbc().row(1).column(1).fill(GridBagConstraints.HORIZONTAL).build());
+            final var currencyLabel = new JLabel(Monetary.getSymbol());
+            add(currencyLabel, gbc().row(1).column(2).fill(GridBagConstraints.HORIZONTAL).build());
         }
 
         public Operation.Branch get() {
-            return new Operation.Branch(Arrays.stream(Category.values())
-                                              .filter(c -> I18n.getString(c).equalsIgnoreCase(categoryField.getText()))
-                                              .findFirst().orElse(Category.OTHER),
+            return new Operation.Branch(CommonUtils.requireNonNull(categorySelector.getSelectedItem()),
                                         Monetary.valueOf(amountField.getText()));
         }
     }
 
-    private class FragmentPanel extends JPanel {
+    private class FragmentPanel extends Card {
 
-        private final JTextField formField;
+        private final JComboBox<Form> formSelector;
         private final JTextField descriptionField;
         private final JPanel branchesPanel;
         private final OptionalGetter<Operation.Fragment> fragment;
 
         public FragmentPanel(@Nullable Operation.Fragment fragment) {
+            super(new GridBagLayout(), 4);
+            ComponentUtils.addMargin(this, 4, 0, 0, 0);
+            setColor(getColor().darker());
             this.fragment = OptionalGetter.of(fragment);
-            this.formField = new JTextField();
+            this.formSelector = new JComboBox<>(CommonUtils.sortedCopy(Form.values(), Form[]::new,
+                                                                       Comparator.comparingInt(f -> f.icon.getUnicode())));
             this.descriptionField = new JTextField();
             this.branchesPanel = new JPanel();
             fillData();
         }
 
         private void fillData() {
-            formField.setText(I18n.getString(fragment.get(Operation.Fragment::getForm)
-                                                     .orElse(Form.OTHER)).toLowerCase());
-            add(formField);
+
+            final var formLabel = new JLabel(I18n.getString("label.common.form"));
+            formLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+            add(formLabel, gbc().fill(GridBagConstraints.HORIZONTAL).build());
+            formSelector.setRenderer((list, value, index, isSelected, cellHasFocus) -> value.view);
+            formSelector.setSelectedItem(fragment.get(Operation.Fragment::getForm).orElse(Form.OTHER));
+            add(formSelector, gbc().column(1).fill(GridBagConstraints.HORIZONTAL).build());
+
+            final var descriptionLabel = new JLabel(I18n.getString("label.common.description"));
+            descriptionLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+            add(descriptionLabel, gbc().row(1).fill(GridBagConstraints.HORIZONTAL).build());
             descriptionField.setText(fragment.get(Operation.Fragment::getDescription).orElse(""));
-            add(descriptionField);
-            add(branchesPanel);
+            add(descriptionField, gbc().row(1).column(1).fill(GridBagConstraints.HORIZONTAL).build());
+
+            add(new JLabel(I18n.getString("label.dialog.categories")), gbc().row(2).width(2).build());
+            final var addBranchButton = new IconButton(I18n.getString("button.add"), MaterialIcons.ADD,
+                                                       new Insets(2, 8, 2, 12), CommonUtils.insetBottom(2));
+            ComponentUtils.setFontSize(addBranchButton, 12f);
+            addBranchButton.setIconSize(16f);
+            addBranchButton.addActionListener(e -> addBranchPanel(null));
+            add(addBranchButton, gbc().row(2).column(1).anchor(GridBagConstraints.EAST).build());
+
+            branchesPanel.setLayout(new BoxLayout(branchesPanel, BoxLayout.Y_AXIS));
+            add(branchesPanel, gbc().row(3).width(2).fill(GridBagConstraints.HORIZONTAL).build());
             fragment.get(Operation.Fragment::getBranches).orElse(VectorConstr.of((Operation.Branch) null))
                     .forEach(this::addBranchPanel);
         }
 
         private void addBranchPanel(@Nullable Operation.Branch branch) {
-            branchesPanel.add(new BranchPanel(branch));
+            final var panel = new BranchPanel(branch);
+            branchesPanel.add(panel);
+            branchesPanel.setBackground(panel.getColor());
             pack();
             setLocationRelativeTo(null);
             revalidate();
@@ -155,9 +196,7 @@ public class OperationDialog extends Dialog {
         }
 
         public Operation.Fragment get() {
-            return new Operation.Fragment(Arrays.stream(Form.values())
-                                                .filter(f -> I18n.getString(f).equalsIgnoreCase(formField.getText()))
-                                                .findFirst().orElse(Form.OTHER),
+            return new Operation.Fragment(CommonUtils.requireNonNull(formSelector.getSelectedItem()),
                                           descriptionField.getText(),
                                           Arrays.stream(branchesPanel.getComponents())
                                                 .map(p -> ((BranchPanel) p).get()).collect(VectorConstr.collector()));
