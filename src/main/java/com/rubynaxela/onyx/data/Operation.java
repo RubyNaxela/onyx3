@@ -78,6 +78,10 @@ public class Operation implements Comparable<Operation> {
         return wGetId().compareTo(other.wGetId());
     }
 
+    public boolean isInternalTransfer() {
+        return fragments.get(0).branches.get(0).category == Category.INTERNAL_TRANSFER;
+    }
+
     public static class Fragment {
 
         private final Form form;

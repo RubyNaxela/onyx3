@@ -20,8 +20,9 @@ public class OperationListView extends Card {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         ComponentUtils.addMargin(this, 0, 0, 8, 0);
 
-        final var leftIcon = operation.positive() ? new Icon(MaterialIcons.ARROW_UPWARD, 36f, Colors.INCOME_COLOR)
-                                                  : new Icon(MaterialIcons.ARROW_DOWNWARD, 36f, Colors.EXPENSE_COLOR);
+        final Icon leftIcon = operation.positive() ? new Icon(MaterialIcons.ARROW_UPWARD, 36f, Colors.INCOME_COLOR) :
+                              operation.negative() ? new Icon(MaterialIcons.ARROW_DOWNWARD, 36f, Colors.EXPENSE_COLOR)
+                                                   : new Icon(MaterialIcons.SYNC_ALT, 36f, Colors.LOGO_LIGHT_GRAY_SHADE);
         ComponentUtils.addMargin(leftIcon, 4);
         add(leftIcon);
         add(createLeftPanel());
@@ -66,18 +67,26 @@ public class OperationListView extends Card {
         contractorAndFormPanel.setLayout(new BoxLayout(contractorAndFormPanel, BoxLayout.X_AXIS));
         contractorAndFormPanel.setBackground(Colors.TRANSPARENT);
 
-        operation.getFragments().stream().map(f -> f.getForm().icon).collect(Collectors.toSet())
-                 .forEach(icon -> contractorAndFormPanel.add(new Icon(icon, 18f)));
+        if (!operation.isInternalTransfer()) {
+            operation.getFragments().stream().map(f -> f.getForm().icon).collect(Collectors.toSet())
+                     .forEach(icon -> contractorAndFormPanel.add(new Icon(icon, 18f)));
 
-        final var directionIcon = new Icon(operation.positive() ? MaterialIcons.KEYBOARD_DOUBLE_ARROW_LEFT
-                                                                : MaterialIcons.KEYBOARD_DOUBLE_ARROW_RIGHT, 18f);
-        ComponentUtils.addMargin(directionIcon, 0, 3, 0, 3);
-        contractorAndFormPanel.add(directionIcon);
+            final var directionIcon = new Icon(operation.positive() ? MaterialIcons.KEYBOARD_DOUBLE_ARROW_LEFT
+                                                                    : MaterialIcons.KEYBOARD_DOUBLE_ARROW_RIGHT, 18f);
+            ComponentUtils.addMargin(directionIcon, 0, 3, 0, 3);
+            contractorAndFormPanel.add(directionIcon);
 
-        final var contractorLabel = new JLabel(operation.getContractor());
-        ComponentUtils.addMargin(contractorLabel, 0, 6, 0, 0);
-        ComponentUtils.setFontSize(contractorLabel, 18f);
-        contractorAndFormPanel.add(contractorLabel);
+            final var contractorLabel = new JLabel(operation.getContractor());
+            ComponentUtils.addMargin(contractorLabel, 0, 6, 0, 0);
+            ComponentUtils.setFontSize(contractorLabel, 18f);
+            contractorAndFormPanel.add(contractorLabel);
+        } else {
+            contractorAndFormPanel.add(new Icon(operation.getFragments().get(0).getForm().icon, 18f));
+            final var directionIcon = new Icon(MaterialIcons.KEYBOARD_DOUBLE_ARROW_RIGHT, 18f);
+            ComponentUtils.addMargin(directionIcon, 0, 3, 0, 3);
+            contractorAndFormPanel.add(directionIcon);
+            contractorAndFormPanel.add(new Icon(operation.getFragments().get(1).getForm().icon, 18f));
+        }
 
         middlePanel.add(contractorAndFormPanel, BorderLayout.NORTH);
 
