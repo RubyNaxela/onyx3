@@ -51,7 +51,7 @@ public class HistoryTab extends WindowTab {
         return topPanel;
     }
 
-    private JList<Operation> createOperationsList() {
+    private JScrollPane createOperationsList() {
         final var operations = Database.INSTANCE.getOperations();
         final var listView = new JList<Operation>();
         listView.setLayout(new GridBagLayout());
@@ -60,6 +60,10 @@ public class HistoryTab extends WindowTab {
         listView.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listView.addListSelectionListener(e -> operationPreviewPanel.setOperation(operations.get(e.getFirstIndex())));
         ViewControllers.REFRESH_OPERATIONS_LIST = listView::updateUI;
-        return listView;
+
+        final JScrollPane operationsList = new JScrollPane(listView);
+        operationsList.setBorder(BorderFactory.createEmptyBorder());
+        operationsList.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        return operationsList;
     }
 }
