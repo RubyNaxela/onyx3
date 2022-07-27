@@ -18,6 +18,10 @@ public final class I18n {
     private I18n() {
     }
 
+    public static Locale getLocale() {
+        return locale;
+    }
+
     @SuppressWarnings("unchecked")
     public static void setLocale(@NotNull Locale locale) {
         I18n.locale = locale;

@@ -1,8 +1,10 @@
 package com.rubynaxela.onyx.data;
 
+import com.rubynaxela.onyx.io.I18n;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Currency;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -88,6 +90,11 @@ public class Monetary implements Comparable<Monetary> {
         return sum(amounts.stream());
     }
 
+    @NotNull
+    public static String getSymbol() {
+        return Currency.getInstance(I18n.getLocale()).getCurrencyCode();
+    }
+
     private void normalize() {
         while (decimalPlaces >= 100) {
             decimalPlaces -= 100;
@@ -109,10 +116,11 @@ public class Monetary implements Comparable<Monetary> {
     }
 
     /**
-     * Returns this amount with the following format:<br>{@code sX+.XX$}, where:
+     * Returns this amount with the following format:<br>{@code sX+.XX $}, where:
      * <ul>
      *     <li>{@code s} is the character {@code '-'} ({@code \u005cu002d}) if this amount is negative</li>
      *     <li>{@code X} are decimal digits (the {@code +} means one or more)</li>
+     *     <li>{@code $} is the currenct code returned by {@link #getSymbol}</li>
      * </ul>
      * This method is equivalent to calling<br>{@code toString(" PLN")} on this object.
      *
@@ -120,8 +128,7 @@ public class Monetary implements Comparable<Monetary> {
      */
     @Override
     public String toString() {
-        return String.format("%s%d.%02d PLN", units < 0 || decimalPlaces < 0 ? "-" : "",
-                             Math.abs(units), Math.abs(decimalPlaces));
+        return toString(" " + getSymbol());
     }
 
     /**
