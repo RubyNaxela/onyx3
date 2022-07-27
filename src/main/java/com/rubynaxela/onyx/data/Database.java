@@ -6,8 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.Comparator;
 import java.util.Vector;
 
 public class Database {
@@ -78,6 +77,7 @@ public class Database {
 
     public void addOperation(@NotNull Operation operation) {
         operations.add(operation);
+        operations.sort(Comparator.reverseOrder());
         update();
     }
 

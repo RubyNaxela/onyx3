@@ -8,7 +8,7 @@ import java.util.Vector;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("ClassCanBeRecord")
-public class Operation {
+public class Operation implements Comparable<Operation> {
 
     private final Date date;
     private final int ordinalInWeek;
@@ -71,6 +71,11 @@ public class Operation {
 
     public String wGetDescription() {
         return fragments.stream().map(Fragment::getDescription).collect(Collectors.joining("\n"));
+    }
+
+    @Override
+    public int compareTo(@NotNull Operation other) {
+        return wGetId().compareTo(other.wGetId());
     }
 
     public static class Fragment {
