@@ -161,7 +161,7 @@ public class AnimationPanel extends JPanel {
      */
     public void startAnimation() {
         final int framerate = 60;
-        final float duration = 5;
+        final float duration = 4;
         final int frameDurationMs = Math.round(1000f / framerate), totalFrames = Math.round(duration * framerate);
         new Thread(() -> {
             try {
