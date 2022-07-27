@@ -62,24 +62,24 @@ public class OperationListView extends Card {
         middlePanel.setLayout(new BorderLayout());
         middlePanel.setBackground(Colors.TRANSPARENT);
 
-        final var contractorAndTypePanel = new JPanel();
-        contractorAndTypePanel.setLayout(new BoxLayout(contractorAndTypePanel, BoxLayout.X_AXIS));
-        contractorAndTypePanel.setBackground(Colors.TRANSPARENT);
+        final var contractorAndFormPanel = new JPanel();
+        contractorAndFormPanel.setLayout(new BoxLayout(contractorAndFormPanel, BoxLayout.X_AXIS));
+        contractorAndFormPanel.setBackground(Colors.TRANSPARENT);
 
-        operation.getFragments().stream().map(f -> f.getType().icon).collect(Collectors.toSet())
-                 .forEach(icon -> contractorAndTypePanel.add(new Icon(icon, 18f)));
+        operation.getFragments().stream().map(f -> f.getForm().icon).collect(Collectors.toSet())
+                 .forEach(icon -> contractorAndFormPanel.add(new Icon(icon, 18f)));
 
         final var directionIcon = new Icon(operation.positive() ? MaterialIcons.KEYBOARD_DOUBLE_ARROW_LEFT
                                                                 : MaterialIcons.KEYBOARD_DOUBLE_ARROW_RIGHT, 18f);
         ComponentUtils.addMargin(directionIcon, 0, 3, 0, 3);
-        contractorAndTypePanel.add(directionIcon);
+        contractorAndFormPanel.add(directionIcon);
 
         final var contractorLabel = new JLabel(operation.getContractor());
         ComponentUtils.addMargin(contractorLabel, 0, 6, 0, 0);
         ComponentUtils.setFontSize(contractorLabel, 18f);
-        contractorAndTypePanel.add(contractorLabel);
+        contractorAndFormPanel.add(contractorLabel);
 
-        middlePanel.add(contractorAndTypePanel, BorderLayout.NORTH);
+        middlePanel.add(contractorAndFormPanel, BorderLayout.NORTH);
 
         final var descriptionArea = new JTextArea(operation.wGetDescription());
         descriptionArea.setBackground(Colors.TRANSPARENT);

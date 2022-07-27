@@ -101,7 +101,7 @@ public class Operation implements Comparable<Operation> {
         }
 
         @NotNull
-        public Form getType() {
+        public Form getForm() {
             return form;
         }
 

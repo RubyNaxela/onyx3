@@ -127,7 +127,7 @@ public class OperationDialog extends Dialog {
         }
 
         private void fillData() {
-            formField.setText(I18n.getString(fragment.get(Operation.Fragment::getType)
+            formField.setText(I18n.getString(fragment.get(Operation.Fragment::getForm)
                                                      .orElse(Form.OTHER)).toLowerCase());
             add(formField);
             descriptionField.setText(fragment.get(Operation.Fragment::getDescription).orElse(""));
