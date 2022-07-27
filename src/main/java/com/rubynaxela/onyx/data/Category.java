@@ -1,8 +1,12 @@
 package com.rubynaxela.onyx.data;
 
 import com.rubynaxela.onyx.gui.MaterialIcons;
+import com.rubynaxela.onyx.io.I18n;
 import jiconfont.IconCode;
+import jiconfont.swing.IconFontSwing;
 import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
 
 public enum Category {
 
@@ -30,8 +34,18 @@ public enum Category {
     TRANSPORTATION(MaterialIcons.EMOJI_TRANSPORTATION);
 
     public final IconCode icon;
+    public final ComboBoxView view;
 
     Category(@NotNull IconCode icon) {
         this.icon = icon;
+        this.view = new ComboBoxView();
+    }
+
+    public class ComboBoxView extends JLabel {
+
+        public ComboBoxView() {
+            super(I18n.getString(Category.this));
+            setIcon(IconFontSwing.buildIcon(icon, getFont().getSize(), getForeground()));
+        }
     }
 }
