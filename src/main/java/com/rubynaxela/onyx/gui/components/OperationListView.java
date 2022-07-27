@@ -66,18 +66,18 @@ public class OperationListView extends Card {
         contractorAndTypePanel.setLayout(new BoxLayout(contractorAndTypePanel, BoxLayout.X_AXIS));
         contractorAndTypePanel.setBackground(Colors.TRANSPARENT);
 
-        final var contractorLabel = new JLabel(operation.getContractor());
-        ComponentUtils.addMargin(contractorLabel, 0, 0, 0, 6);
-        ComponentUtils.setFontSize(contractorLabel, 18f);
-        contractorAndTypePanel.add(contractorLabel);
-
-        final var directionIcon = new Icon(operation.positive() ? MaterialIcons.KEYBOARD_DOUBLE_ARROW_RIGHT
-                                                                : MaterialIcons.KEYBOARD_DOUBLE_ARROW_LEFT, 18f);
-        ComponentUtils.addMargin(directionIcon, 0, 2, 0, 4);
-        contractorAndTypePanel.add(directionIcon);
-
         operation.getFragments().stream().map(f -> f.getType().icon).collect(Collectors.toSet())
                  .forEach(icon -> contractorAndTypePanel.add(new Icon(icon, 18f)));
+
+        final var directionIcon = new Icon(operation.positive() ? MaterialIcons.KEYBOARD_DOUBLE_ARROW_LEFT
+                                                                : MaterialIcons.KEYBOARD_DOUBLE_ARROW_RIGHT, 18f);
+        ComponentUtils.addMargin(directionIcon, 0, 3, 0, 3);
+        contractorAndTypePanel.add(directionIcon);
+
+        final var contractorLabel = new JLabel(operation.getContractor());
+        ComponentUtils.addMargin(contractorLabel, 0, 6, 0, 0);
+        ComponentUtils.setFontSize(contractorLabel, 18f);
+        contractorAndTypePanel.add(contractorLabel);
 
         middlePanel.add(contractorAndTypePanel, BorderLayout.NORTH);
 
