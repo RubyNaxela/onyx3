@@ -109,8 +109,12 @@ public class Monetary implements Comparable<Monetary> {
     }
 
     /**
-     * Returns this amount with the following format: {@code sX.XX PLN}, where {@code s} is the character
-     * {@code '-'} ({@code \u005cu002d})  if this amount is negative, and {@code X} are decimal digits.
+     * Returns this amount with the following format:<br>{@code sX+.XX$}, where:
+     * <ul>
+     *     <li>{@code s} is the character {@code '-'} ({@code \u005cu002d}) if this amount is negative</li>
+     *     <li>{@code X} are decimal digits (the {@code +} means one or more)</li>
+     * </ul>
+     * This method is equivalent to calling<br>{@code toString(" PLN")} on this object.
      *
      * @return the formatted amount
      */
@@ -118,6 +122,22 @@ public class Monetary implements Comparable<Monetary> {
     public String toString() {
         return String.format("%s%d.%02d PLN", units < 0 || decimalPlaces < 0 ? "-" : "",
                              Math.abs(units), Math.abs(decimalPlaces));
+    }
+
+    /**
+     * Returns this amount with the following format:<br>{@code sX+.XX$}, where:
+     * <ul>
+     *     <li>{@code s} is the character {@code '-'} ({@code \u005cu002d}) if this amount is negative</li>
+     *     <li>{@code X} are decimal digits (the {@code +} means one or more)</li>
+     *     <li>{@code $} is the {@code suffix} argument</li>
+     * </ul>
+     *
+     * @param suffix the suffix appended to the numerical value of this amount
+     * @return the formatted amount
+     */
+    public String toString(@NotNull String suffix) {
+        return String.format("%s%d.%02d%s", units < 0 || decimalPlaces < 0 ? "-" : "",
+                             Math.abs(units), Math.abs(decimalPlaces), suffix);
     }
 
     /**
