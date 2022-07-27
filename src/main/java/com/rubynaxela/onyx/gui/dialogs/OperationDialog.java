@@ -90,6 +90,7 @@ public class OperationDialog extends Dialog {
         private final OptionalGetter<Operation.Branch> branch;
 
         public BranchPanel(@Nullable Operation.Branch branch) {
+            super(new GridBagLayout());
             this.branch = OptionalGetter.of(branch);
             this.categoryField = new JTextField();
             this.amountField = new JTextField();
@@ -97,10 +98,18 @@ public class OperationDialog extends Dialog {
         }
 
         private void fillData() {
+
+            final var categoryLabel = new JLabel(I18n.getString("label.common.category"));
+            categoryLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+            add(categoryLabel, gbc().fill(GridBagConstraints.HORIZONTAL).build());
             categoryField.setText(I18n.getString(branch.get(Operation.Branch::getCategory).orElse(Category.OTHER)).toLowerCase());
-            add(categoryField);
-            amountField.setText(branch.get(Operation.Branch::getAmount).orElse(Monetary.ZERO).toString());
-            add(amountField);
+            add(categoryField, gbc().column(1).fill(GridBagConstraints.HORIZONTAL).build());
+
+            final var amountLabel = new JLabel(I18n.getString("label.common.amount"));
+            add(amountLabel, gbc().row(1).fill(GridBagConstraints.HORIZONTAL).build());
+            amountField.setText(branch.get(Operation.Branch::getAmount).orElse(Monetary.ZERO).toString(""));
+            amountField.setHorizontalAlignment(SwingConstants.RIGHT);
+            add(amountField, gbc().row(1).column(1).fill(GridBagConstraints.HORIZONTAL).build());
         }
 
         public Operation.Branch get() {
