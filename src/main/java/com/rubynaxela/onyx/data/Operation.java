@@ -53,7 +53,7 @@ public class Operation implements Comparable<Operation> {
     }
 
     public Monetary wGetTotalAmount() {
-        return Monetary.sum(fragments.stream().flatMap(f -> f.branches.stream().map(Branch::getAmount)));
+        return Monetary.sum(fragments.stream().map(Fragment::wGetTotalAmount));
     }
 
     public boolean positive() {
@@ -118,6 +118,14 @@ public class Operation implements Comparable<Operation> {
         public Vector<Branch> getBranches() {
             return branches;
         }
+
+        public boolean wIsCashOperation() {
+            return form == Form.CASH_PAYMENT || form == Form.CASH_REVENUE;
+        }
+
+        public Monetary wGetTotalAmount() {
+            return Monetary.sum(branches.stream().map(Branch::getAmount));
+        }
     }
 
     public static class Branch {
@@ -149,6 +157,7 @@ public class Operation implements Comparable<Operation> {
         }
     }
 
+    @SuppressWarnings("unused")
     static class Raw {
 
         @JsonProperty("d")
