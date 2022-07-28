@@ -67,6 +67,19 @@ public class Monetary implements Comparable<Monetary> {
     }
 
     /**
+     * Subtracts one {@code Monetary} object from another and returns the result.
+     *
+     * @param a the amount to subtract from
+     * @param b the amount to subtract
+     * @return the difference: {@code a - b}
+     */
+    @NotNull
+    @Contract(value = "_, _ -> new", pure = true)
+    public static Monetary subtract(@NotNull Monetary a, @NotNull Monetary b) {
+        return new Monetary(a.units - b.units, (short) (a.decimalPlaces - b.decimalPlaces));
+    }
+
+    /**
      * Sums the stream of {@code Monetary} objects and returns the result.
      *
      * @param amounts the stream of amounts
@@ -103,6 +116,13 @@ public class Monetary implements Comparable<Monetary> {
         while (decimalPlaces <= -100) {
             decimalPlaces += 100;
             units--;
+        }
+        if (units > 0 && decimalPlaces < 0) {
+            decimalPlaces += 100;
+            units--;
+        } else if (units < 0 && decimalPlaces > 0) {
+            decimalPlaces -= 100;
+            units++;
         }
     }
 
