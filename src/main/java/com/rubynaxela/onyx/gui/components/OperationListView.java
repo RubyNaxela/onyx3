@@ -1,5 +1,6 @@
 package com.rubynaxela.onyx.gui.components;
 
+import com.rubynaxela.onyx.data.Form;
 import com.rubynaxela.onyx.data.Operation;
 import com.rubynaxela.onyx.gui.MaterialIcons;
 import com.rubynaxela.onyx.util.Colors;
@@ -68,8 +69,8 @@ public class OperationListView extends Card {
         contractorAndFormPanel.setBackground(Colors.TRANSPARENT);
 
         if (!operation.isInternalTransfer()) {
-            operation.getFragments().stream().map(f -> f.getForm().icon).collect(Collectors.toSet())
-                     .forEach(icon -> contractorAndFormPanel.add(new Icon(icon, 18f)));
+            operation.getFragments().stream().map(Operation.Fragment::getForm).collect(Collectors.toSet())
+                     .forEach(c -> contractorAndFormPanel.add(new Icon(c.icon, 18f, c.color.brighter().brighter())));
 
             final var directionIcon = new Icon(operation.positive() ? MaterialIcons.KEYBOARD_DOUBLE_ARROW_LEFT
                                                                     : MaterialIcons.KEYBOARD_DOUBLE_ARROW_RIGHT, 18f);
@@ -81,11 +82,12 @@ public class OperationListView extends Card {
             ComponentUtils.setFontSize(contractorLabel, 18f);
             contractorAndFormPanel.add(contractorLabel);
         } else {
-            contractorAndFormPanel.add(new Icon(operation.getFragments().get(0).getForm().icon, 18f));
+            final Form from = operation.getFragments().get(0).getForm(), to = operation.getFragments().get(1).getForm();
+            contractorAndFormPanel.add(new Icon(from.icon, 18f, from.color.brighter().brighter()));
             final var directionIcon = new Icon(MaterialIcons.KEYBOARD_DOUBLE_ARROW_RIGHT, 18f);
             ComponentUtils.addMargin(directionIcon, 0, 3, 0, 3);
             contractorAndFormPanel.add(directionIcon);
-            contractorAndFormPanel.add(new Icon(operation.getFragments().get(1).getForm().icon, 18f));
+            contractorAndFormPanel.add(new Icon(to.icon, 18f, to.color.brighter().brighter()));
         }
 
         middlePanel.add(contractorAndFormPanel, BorderLayout.NORTH);
@@ -105,13 +107,13 @@ public class OperationListView extends Card {
         rightPanel.setBackground(Colors.TRANSPARENT);
 
         final var categories = operation.getFragments().stream().flatMap(f -> f.getBranches().stream())
-                                        .map(b -> b.getCategory().icon).collect(Collectors.toSet());
+                                        .map(Operation.Branch::getCategory).collect(Collectors.toSet());
         if (categories.size() == 1) {
             rightPanel.setLayout(new GridLayout(0, 1));
-            categories.forEach(icon -> rightPanel.add(new Icon(icon, 36f)));
+            categories.forEach(c -> rightPanel.add(new Icon(c.icon, 36f, c.color.brighter().brighter())));
         } else {
             rightPanel.setLayout(new GridLayout(0, 2));
-            categories.forEach(icon -> rightPanel.add(new Icon(icon, 18f)));
+            categories.forEach(c -> rightPanel.add(new Icon(c.icon, 18f, c.color.brighter().brighter())));
         }
 
         return rightPanel;
