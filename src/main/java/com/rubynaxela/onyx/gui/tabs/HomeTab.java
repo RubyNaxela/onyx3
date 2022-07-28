@@ -1,7 +1,6 @@
 package com.rubynaxela.onyx.gui.tabs;
 
 import com.rubynaxela.onyx.data.Database;
-import com.rubynaxela.onyx.data.Monetary;
 import com.rubynaxela.onyx.gui.MaterialIcons;
 import com.rubynaxela.onyx.gui.ViewControllers;
 import com.rubynaxela.onyx.gui.components.Card;
@@ -12,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 import static com.rubynaxela.onyx.gui.GridBagConstraintsBuilder.gbc;
 
@@ -21,7 +19,8 @@ import static com.rubynaxela.onyx.gui.GridBagConstraintsBuilder.gbc;
  */
 public class HomeTab extends WindowTab {
 
-    private final JLabel availableBalanceLabel, savingsLabel, cashLabel, pendingOperationsLabel, totalBalanceLabel;
+    private final JLabel accountBalanceLabel, savingsLabel, cashLabel,
+            pendingOperationsLabel, availableBalanceLabel, totalBalanceLabel;
 
     /**
      * Creates the content panel.
@@ -36,24 +35,26 @@ public class HomeTab extends WindowTab {
         layout.setHgap(16);
         topCardsPanel.setLayout(layout);
 
-        final var data = Database.INSTANCE;
-        final var availableBalance = Monetary.add(data.getInitialAmount(), data.wGetOperationsBalance());
-        final var pendingBalance = data.wGetPendingOperationsBalance();
-        availableBalanceLabel = new JLabel(availableBalance.toString());
-        savingsLabel = new JLabel(data.getSavings().toString());
-        cashLabel = new JLabel(data.getCash().toString());
-        pendingOperationsLabel = new JLabel(pendingBalance.toString());
-        totalBalanceLabel = new JLabel(Monetary.sum(List.of(availableBalance, pendingBalance,
-                                                            data.getCash(), data.getSavings())).toString());
+        accountBalanceLabel = new JLabel();
+        savingsLabel = new JLabel();
+        cashLabel = new JLabel();
+        pendingOperationsLabel = new JLabel();
+        availableBalanceLabel = new JLabel();
+        totalBalanceLabel = new JLabel();
 
-        ViewControllers.AVAILABLE_BALANCE = v -> availableBalanceLabel.setText(v.toString());
-        ViewControllers.SAVINGS = v -> savingsLabel.setText(v.toString());
-        ViewControllers.CASH = v -> cashLabel.setText(v.toString());
-        ViewControllers.PENDING_OPERATIONS = v -> pendingOperationsLabel.setText(v.toString());
-        ViewControllers.TOTAL_BALANCE = v -> totalBalanceLabel.setText(v.toString());
+        ViewControllers.UPDATE_SUMMARY_CARDS = () -> {
+            final var database = Database.INSTANCE;
+            accountBalanceLabel.setText(database.wGetAccountBalance().toString());
+            savingsLabel.setText(database.getSavings().toString());
+            cashLabel.setText(database.wGetTotalCash().toString());
+            pendingOperationsLabel.setText(database.wGetPendingOperationsBalance().toString());
+            availableBalanceLabel.setText(database.wGetAvailableBalance().toString());
+            totalBalanceLabel.setText(database.wGetTotalBalance().toString());
+        };
+        ViewControllers.UPDATE_SUMMARY_CARDS.run();
 
-        topCardsPanel.add(createTopCard(MaterialIcons.ACCOUNT_BALANCE, availableBalanceLabel,
-                                        I18n.getString("label.card.available_balance")));
+        topCardsPanel.add(createTopCard(MaterialIcons.ACCOUNT_BALANCE, accountBalanceLabel,
+                                        I18n.getString("label.card.account_balance")));
         topCardsPanel.add(createTopCard(MaterialIcons.SAVINGS, savingsLabel,
                                         I18n.getString("label.card.savings")));
         topCardsPanel.add(createTopCard(MaterialIcons.PAYMENTS, cashLabel,
@@ -62,7 +63,12 @@ public class HomeTab extends WindowTab {
                                         I18n.getString("label.card.pending")));
 
         add(topCardsPanel, gbc().build());
-        add(createSumCard(), gbc().row(1).fill(GridBagConstraints.HORIZONTAL).build());
+        add(createSumCard(MaterialIcons.FUNCTIONS, totalBalanceLabel,
+                          I18n.getString("label.card.total_balance")),
+            gbc().row(1).fill(GridBagConstraints.HORIZONTAL).build());
+        add(createSumCard(MaterialIcons.ACCOUNT_BALANCE_WALLET, availableBalanceLabel,
+                          I18n.getString("label.card.available_balance")),
+            gbc().row(2).fill(GridBagConstraints.HORIZONTAL).build());
     }
 
     private Card createTopCard(@NotNull IconCode icon, @NotNull JLabel dataLabel, @NotNull String description) {
@@ -86,23 +92,23 @@ public class HomeTab extends WindowTab {
         return card;
     }
 
-    private Card createSumCard() {
+    private Card createSumCard(@NotNull IconCode icon, @NotNull JLabel valueLabel, @NotNull String description) {
 
         final var sumCard = new Card();
         sumCard.setLayout(new BorderLayout());
-        ComponentUtils.addMargin(sumCard, 16, 0, 16, 0);
+        ComponentUtils.addMargin(sumCard, 16, 0, 0, 0);
 
         final var iconColor = UIManager.getColor("Button.focusedBorderColor").brighter().brighter();
-        final var iconLabel = ComponentUtils.createIconLabel(MaterialIcons.ACCOUNT_BALANCE_WALLET, 32f, iconColor);
+        final var iconLabel = ComponentUtils.createIconLabel(icon, 32f, iconColor);
         ComponentUtils.addMargin(iconLabel, 0, 16, 0, 0);
         sumCard.add(iconLabel, BorderLayout.WEST);
 
-        final var totalBalanceDescription = new JLabel(I18n.getString("label.card.total_balance"));
-        ComponentUtils.setFontSize(totalBalanceDescription, 14f);
-        sumCard.add(totalBalanceDescription, BorderLayout.CENTER);
+        final var descriptionLabel = new JLabel(description);
+        ComponentUtils.setFontSize(descriptionLabel, 14f);
+        sumCard.add(descriptionLabel, BorderLayout.CENTER);
 
-        ComponentUtils.setFontParams(totalBalanceLabel, Font.BOLD, 20f);
-        sumCard.add(totalBalanceLabel, BorderLayout.EAST);
+        ComponentUtils.setFontParams(valueLabel, Font.BOLD, 20f);
+        sumCard.add(valueLabel, BorderLayout.EAST);
 
         return sumCard;
     }
