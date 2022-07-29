@@ -1,15 +1,15 @@
 package com.rubynaxela.onyx.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.rubynaxela.onyx.gui.ViewControllers;
 import com.rubynaxela.onyx.io.S31N;
 import com.rubynaxela.onyx.util.CachedGetter;
+import com.rubynaxela.onyx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
+import java.util.function.Predicate;
 
 public class Database {
 
@@ -20,6 +20,8 @@ public class Database {
     private final Vector<PendingOperation> pendingOperations;
     private final CachedGetter<Monetary> operationsBalance, totalCash, pendingOperationsBalance,
             accountBalance, availableBalance, totalBalance;
+    private final Map<Category, CachedGetter<Monetary>> expensesBreakdown, revenuesBreakdown;
+    private final CachedGetter<Map<Category, Monetary>> expensesByCategory, revenuesByCategory;
     private Monetary initialAmount, savings;
     private int modCount;
 
@@ -32,15 +34,36 @@ public class Database {
         this.modCount = 0;
 
         this.operationsBalance = new CachedGetter<>(() -> Monetary.sum(operations.stream().map(Operation::wGetTotalAmount)), 0);
-        this.totalCash = new CachedGetter<>(() -> Monetary.sum(operations.stream().flatMap(o -> o.getFragments().stream())
-                                                                          .filter(Operation.Fragment::wIsCashOperation)
-                                                                          .map(Operation.Fragment::wGetTotalAmount)), 0);
+        this.totalCash = new CachedGetter<>(() -> Monetary.sum(operations.stream().flatMap(Operation::getSFragments)
+                                                                         .filter(Operation.Fragment::wIsCashOperation)
+                                                                         .map(Operation.Fragment::wGetTotalAmount)), 0);
         this.pendingOperationsBalance = new CachedGetter<>(() -> Monetary.sum(pendingOperations.stream()
-                                                                                                .map(PendingOperation::getAmount)), 0);
+                                                                                               .map(PendingOperation::getAmount)), 0);
         this.accountBalance = new CachedGetter<>(() -> Monetary.subtract(Monetary.add(initialAmount, wGetOperationsBalance()),
-                                                                          Monetary.add(savings, wGetTotalCash())), 0);
+                                                                         Monetary.add(savings, wGetTotalCash())), 0);
         this.availableBalance = new CachedGetter<>(() -> Monetary.add(initialAmount, wGetOperationsBalance()), 0);
         this.totalBalance = new CachedGetter<>(() -> Monetary.add(wGetAvailableBalance(), wGetPendingOperationsBalance()), 0);
+
+        this.expensesBreakdown = new LinkedHashMap<>();
+        Arrays.stream(Category.values())
+              .forEach(c -> expensesBreakdown.put(c, breakdownGetter(b -> b.getAmount().isNegative() && b.getCategory() == c)));
+
+        this.revenuesBreakdown = new LinkedHashMap<>();
+        Arrays.stream(Category.values())
+              .forEach(c -> revenuesBreakdown.put(c, breakdownGetter(b -> b.getAmount().isPositive() && b.getCategory() == c)));
+
+        this.expensesByCategory = new CachedGetter<>(() -> {
+            final var map = new HashMap<Category, Monetary>();
+            Arrays.stream(Category.values()).map(c -> Pair.of(c, expensesBreakdown.get(c).get(modCount)))
+                  .filter(pair -> pair.v1.analyzed && pair.v2.isNegative()).forEach(pair -> map.put(pair.v1, pair.v2));
+            return map;
+        }, 0);
+        this.revenuesByCategory = new CachedGetter<>(() -> {
+            final var map = new HashMap<Category, Monetary>();
+            Arrays.stream(Category.values()).map(c -> Pair.of(c, revenuesBreakdown.get(c).get(modCount)))
+                  .filter(pair -> pair.v1.analyzed && pair.v2.isPositive()).forEach(pair -> map.put(pair.v1, pair.v2));
+            return map;
+        }, 0);
     }
 
     public static Database from(@NotNull Database.Raw database) {
@@ -49,8 +72,15 @@ public class Database {
                             new Vector<>(Arrays.stream(database.pendingOperations).map(PendingOperation::from).toList()));
     }
 
+    private CachedGetter<Monetary> breakdownGetter(@NotNull Predicate<Operation.Branch> predicate) {
+        return new CachedGetter<>(() -> Monetary.sum(this.operations.stream().flatMap(Operation::getSFragments)
+                                                                    .flatMap(Operation.Fragment::getSBranches)
+                                                                    .filter(predicate).map(Operation.Branch::getAmount)), 0);
+    }
+
     private void update() {
         modCount++;
+        ViewControllers.UPDATE_SUMMARY_CARDS.run();
         S31N.serialize(raw(), DATABASE_FILE);
     }
 
@@ -141,6 +171,14 @@ public class Database {
 
     public Monetary wGetTotalBalance() {
         return totalBalance.get(modCount);
+    }
+
+    public Map<Category, Monetary> wGetExpensesByCategory() {
+        return expensesByCategory.get(modCount);
+    }
+
+    public Map<Category, Monetary> wGetRevenuesByCategory() {
+        return revenuesByCategory.get(modCount);
     }
 
     static class Raw {
