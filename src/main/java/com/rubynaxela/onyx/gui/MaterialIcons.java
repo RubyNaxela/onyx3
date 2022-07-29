@@ -24,6 +24,7 @@ public enum MaterialIcons implements IconCode {
     EMOJI_FOOD_BEVERAGE('\uea1b'),
     EMOJI_TRANSPORTATION('\uea1f'),
     EGG('\ueacc'),
+    EVENT('\ue878'),
     FUNCTIONS('\ue24a'),
     GRID_VIEW('\ue9b0'),
     HANDYMAN('\uf10b'),

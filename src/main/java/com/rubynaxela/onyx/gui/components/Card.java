@@ -9,13 +9,14 @@ import java.awt.*;
 
 public class Card extends JPanel {
 
+    public static final Color DEFAULT_COLOR = UIManager.getColor("Desktop.background").brighter();
     private final int padding;
     private Color color;
 
     public Card(@NotNull LayoutManager manager, int padding) {
         super(manager);
         this.padding = padding;
-        this.color = UIManager.getColor("Desktop.background").brighter();
+        this.color = DEFAULT_COLOR;
         setBackground(Colors.TRANSPARENT);
     }
 
