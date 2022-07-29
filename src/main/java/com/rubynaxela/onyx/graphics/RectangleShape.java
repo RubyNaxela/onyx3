@@ -1,9 +1,9 @@
-package com.rubynaxela.onyx.gui.animation;
+package com.rubynaxela.onyx.graphics;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 
 public class RectangleShape extends Drawable {
 
@@ -33,10 +33,8 @@ public class RectangleShape extends Drawable {
     }
 
     @Override
-    public void draw(@NotNull Graphics2D graphics) {
-        final var previousColor = graphics.getColor();
-        final var previousTransform = graphics.getTransform().clone();
-        final var previousAntiAliasing = graphics.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
+    public void draw(@NotNull Graphics2D g) {
+        final var graphics = (Graphics2D) g.create();
         if (rotation != 0) {
             final var transform = graphics.getTransform();
             transform.rotate(rotation * PI_180, position.x, position.y);
@@ -45,10 +43,10 @@ public class RectangleShape extends Drawable {
         }
         graphics.setColor(color);
         graphics.fillRect((int) position.x, (int) position.y, (int) size.x, (int) size.y);
-        graphics.setColor(previousColor);
-        if (rotation != 0) {
-            graphics.setTransform((AffineTransform) previousTransform);
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, previousAntiAliasing);
-        }
+    }
+
+    @Override
+    public Rectangle2D.Float getGlobalBounds() {
+        return new Rectangle2D.Float(position.x, position.y, size.x, size.y);
     }
 }

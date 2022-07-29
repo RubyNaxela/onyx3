@@ -1,9 +1,11 @@
-package com.rubynaxela.onyx.gui.animation;
+package com.rubynaxela.onyx.graphics;
 
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 /**
  * Represents objects that can be drawn with {@link Graphics2D} on a {@link JComponent}.
@@ -43,4 +45,13 @@ public abstract class Drawable {
      * @param graphics a {@link Graphics2D} object that draws this object
      */
     public abstract void draw(@NotNull Graphics2D graphics);
+
+    public abstract Rectangle2D.Float getGlobalBounds();
+
+    public BufferedImage createImage() {
+        final var bounds = getGlobalBounds();
+        final var image = new BufferedImage((int) bounds.width, (int) bounds.height, BufferedImage.TYPE_INT_ARGB);
+        draw(image.createGraphics());
+        return image;
+    }
 }

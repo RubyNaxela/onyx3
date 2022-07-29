@@ -1,6 +1,6 @@
 package com.rubynaxela.onyx.gui.window;
 
-import com.rubynaxela.onyx.gui.animation.CircleShape;
+import com.rubynaxela.onyx.graphics.CircleShape;
 import com.rubynaxela.onyx.gui.event.ClickListener;
 import com.rubynaxela.onyx.gui.event.MouseDragListener;
 import com.rubynaxela.onyx.gui.event.PressAndReleaseListener;

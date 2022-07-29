@@ -1,4 +1,4 @@
-package com.rubynaxela.onyx.gui.animation;
+package com.rubynaxela.onyx.graphics;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

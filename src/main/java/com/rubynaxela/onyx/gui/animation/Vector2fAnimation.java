@@ -1,5 +1,6 @@
 package com.rubynaxela.onyx.gui.animation;
 
+import com.rubynaxela.onyx.graphics.Vector2f;
 import com.rubynaxela.onyx.util.FloatRange;
 import org.jetbrains.annotations.NotNull;
 
