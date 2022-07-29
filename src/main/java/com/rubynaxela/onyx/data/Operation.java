@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Vector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SuppressWarnings("ClassCanBeRecord")
 public class Operation implements Comparable<Operation> {
@@ -50,6 +51,11 @@ public class Operation implements Comparable<Operation> {
     @NotNull
     public Vector<Fragment> getFragments() {
         return fragments;
+    }
+
+    @NotNull
+    public Stream<Fragment> getSFragments() {
+        return fragments.stream();
     }
 
     public Monetary wGetTotalAmount() {
@@ -117,6 +123,11 @@ public class Operation implements Comparable<Operation> {
         @NotNull
         public Vector<Branch> getBranches() {
             return branches;
+        }
+
+        @NotNull
+        public Stream<Branch> getSBranches() {
+            return branches.stream();
         }
 
         public boolean wIsCashOperation() {
