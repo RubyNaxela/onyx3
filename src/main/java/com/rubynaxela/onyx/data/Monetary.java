@@ -126,6 +126,26 @@ public class Monetary implements Comparable<Monetary> {
         }
     }
 
+    public boolean isPositive() {
+        return compareTo(Monetary.ZERO) > 0;
+    }
+
+    public boolean isNegative() {
+        return compareTo(Monetary.ZERO) < 0;
+    }
+
+    @NotNull
+    @Contract(pure = true, value = "-> new")
+    public Monetary absolute() {
+        return Monetary.valueOf(Math.abs(toDouble()));
+    }
+
+    @NotNull
+    @Contract(pure = true, value = "-> new")
+    public Monetary negativeAbsolute() {
+        return Monetary.valueOf(-Math.abs(toDouble()));
+    }
+
     /**
      * Converts this {@code Monetary} object to a {@code double} value.
      *
