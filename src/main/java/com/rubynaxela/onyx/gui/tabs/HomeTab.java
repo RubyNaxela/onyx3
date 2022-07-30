@@ -1,19 +1,24 @@
 package com.rubynaxela.onyx.gui.tabs;
 
+import com.rubynaxela.onyx.data.Category;
 import com.rubynaxela.onyx.data.Database;
+import com.rubynaxela.onyx.data.Monetary;
+import com.rubynaxela.onyx.graphics.RectangleShape;
 import com.rubynaxela.onyx.gui.MaterialIcons;
 import com.rubynaxela.onyx.gui.ViewControllers;
 import com.rubynaxela.onyx.gui.chart.Charts;
 import com.rubynaxela.onyx.gui.components.Card;
 import com.rubynaxela.onyx.gui.components.ChartPanel;
-import com.rubynaxela.onyx.gui.components.SizeController;
 import com.rubynaxela.onyx.io.I18n;
+import com.rubynaxela.onyx.util.Colors;
 import com.rubynaxela.onyx.util.ComponentUtils;
 import jiconfont.IconCode;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Comparator;
+import java.util.Map;
 
 import static com.rubynaxela.onyx.gui.GridBagConstraintsBuilder.gbc;
 
@@ -127,18 +132,38 @@ public class HomeTab extends WindowTab {
             gbc().row(2).width(2).fill(GridBagConstraints.HORIZONTAL).build());
     }
 
+    private JPanel createLegend(@NotNull Map<Category, Monetary> dataset) {
+        final var panel = new JPanel(new GridLayout(0, 1));
+        panel.setBackground(Colors.TRANSPARENT);
+        dataset.entrySet().stream().sorted(Comparator.comparing(e -> e.getValue().negativeAbsolute())).forEach(e -> {
+            final var colorPreview = new RectangleShape(16, 16);
+            colorPreview.setColor(e.getKey().color);
+            final var label = new JLabel();
+            final var color = label.getForeground();
+            label.setText("<html>" + I18n.getString(e.getKey()) + " :: <span style=\"color:rgba(" +
+                          color.getRed() + "," + color.getGreen() + "," + color.getBlue() + ",0.5)\">" +
+                          e.getValue().absolute() + "</span></html>");
+            label.setIcon(new ImageIcon(colorPreview.createImage()));
+            ComponentUtils.addMargin(label, 2, 0, 2, 0);
+            panel.add(label);
+        });
+        return panel;
+    }
+
     private void createCharts() {
 
-        final var expensesBreakdownCard = new Card(new GridLayout());
-        expensesBreakdownCard.add(expensesBreakdown);
-        add(expensesBreakdownCard, gbc().row(3).weightX(2).fill(GridBagConstraints.BOTH)
+        final var expensesBreakdownCard = new Card(new GridBagLayout());
+        expensesBreakdownCard.add(expensesBreakdown, gbc().weightX(1).weightY(1).fill(GridBagConstraints.BOTH).build());
+        expensesBreakdownCard.add(createLegend(Database.INSTANCE.wGetExpensesByCategory()),
+                                  gbc().column(1).extPaddingLeft(16).build());
+        add(expensesBreakdownCard, gbc().row(3).weightX(1).fill(GridBagConstraints.BOTH)
                                         .extPadding(16, 0, 0, 8).build());
 
-        final var revenuesBreakdownCard = new Card(new GridLayout());
-        revenuesBreakdownCard.add(revenuesBreakdown);
-        add(revenuesBreakdownCard, gbc().row(3).column(1).weightX(1).fill(GridBagConstraints.BOTH)
+        final var revenuesBreakdownCard = new Card(new GridBagLayout());
+        revenuesBreakdownCard.add(revenuesBreakdown, gbc().weightX(1).weightY(1).fill(GridBagConstraints.BOTH).build());
+        revenuesBreakdownCard.add(createLegend(Database.INSTANCE.wGetRevenuesByCategory()),
+                                  gbc().row(1).anchor(GridBagConstraints.WEST).extPaddingTop(16).build());
+        add(revenuesBreakdownCard, gbc().row(3).column(1).fill(GridBagConstraints.VERTICAL)
                                         .extPadding(16, 8, 0, 0).build());
-
-        add(new SizeController(new Dimension(0, 384)), gbc().row(3).column(2).build());
     }
 }
