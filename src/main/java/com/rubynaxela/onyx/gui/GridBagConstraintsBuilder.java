@@ -200,6 +200,17 @@ public final class GridBagConstraintsBuilder {
     }
 
     /**
+     * Sets the component's external top padding (the {@link GridBagConstraints#insets}{@code #}{@link Insets#left} value).
+     *
+     * @param padding the component's left padding
+     * @return reference to this builder
+     */
+    @Contract(value = "_ -> this", mutates = "this")
+    public GridBagConstraintsBuilder extPaddingLeft(int padding) {
+        return extPadding(constraints.insets.top, padding, constraints.insets.bottom, constraints.insets.right);
+    }
+
+    /**
      * Sets the rule of placement the component in a cell (the {@link GridBagConstraints#anchor} value).
      *
      * @param anchor the placement fule
