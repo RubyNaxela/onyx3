@@ -3,7 +3,10 @@ package com.rubynaxela.onyx.gui.tabs;
 import com.rubynaxela.onyx.data.Database;
 import com.rubynaxela.onyx.gui.MaterialIcons;
 import com.rubynaxela.onyx.gui.ViewControllers;
+import com.rubynaxela.onyx.gui.chart.Charts;
 import com.rubynaxela.onyx.gui.components.Card;
+import com.rubynaxela.onyx.gui.components.ChartPanel;
+import com.rubynaxela.onyx.gui.components.SizeController;
 import com.rubynaxela.onyx.io.I18n;
 import com.rubynaxela.onyx.util.ComponentUtils;
 import jiconfont.IconCode;
@@ -19,8 +22,9 @@ import static com.rubynaxela.onyx.gui.GridBagConstraintsBuilder.gbc;
  */
 public class HomeTab extends WindowTab {
 
-    private final JLabel accountBalanceLabel, savingsLabel, cashLabel,
-            pendingOperationsLabel, availableBalanceLabel, totalBalanceLabel;
+    private final JLabel accountBalanceLabel, savingsLabel, cashLabel, pendingOperationsLabel;
+    private final JLabel availableBalanceLabel, totalBalanceLabel;
+    private final ChartPanel expensesBreakdown, revenuesBreakdown;
 
     /**
      * Creates the content panel.
@@ -30,17 +34,17 @@ public class HomeTab extends WindowTab {
         setRootLayout(new FlowLayout(FlowLayout.LEFT));
         setLayout(new GridBagLayout());
 
-        final var topCardsPanel = new JPanel();
-        final var layout = new GridLayout(1, 4);
-        layout.setHgap(16);
-        topCardsPanel.setLayout(layout);
-
         accountBalanceLabel = new JLabel();
         savingsLabel = new JLabel();
         cashLabel = new JLabel();
         pendingOperationsLabel = new JLabel();
         availableBalanceLabel = new JLabel();
         totalBalanceLabel = new JLabel();
+        expensesBreakdown = new ChartPanel();
+        revenuesBreakdown = new ChartPanel();
+
+        createSummaryCards();
+        createCharts();
 
         ViewControllers.UPDATE_SUMMARY_CARDS = () -> {
             final var database = Database.INSTANCE;
@@ -50,25 +54,10 @@ public class HomeTab extends WindowTab {
             pendingOperationsLabel.setText(database.wGetPendingOperationsBalance().toString());
             availableBalanceLabel.setText(database.wGetAvailableBalance().toString());
             totalBalanceLabel.setText(database.wGetTotalBalance().toString());
+            expensesBreakdown.draw(Charts.EXPENSES_BREAKDOWN);
+            revenuesBreakdown.draw(Charts.REVENUES_BREAKDOWN);
         };
         ViewControllers.UPDATE_SUMMARY_CARDS.run();
-
-        topCardsPanel.add(createTopCard(MaterialIcons.ACCOUNT_BALANCE, accountBalanceLabel,
-                                        I18n.getString("label.card.account_balance")));
-        topCardsPanel.add(createTopCard(MaterialIcons.SAVINGS, savingsLabel,
-                                        I18n.getString("label.card.savings")));
-        topCardsPanel.add(createTopCard(MaterialIcons.PAYMENTS, cashLabel,
-                                        I18n.getString("label.card.cash")));
-        topCardsPanel.add(createTopCard(MaterialIcons.PENDING_ACTIONS, pendingOperationsLabel,
-                                        I18n.getString("label.card.pending")));
-
-        add(topCardsPanel, gbc().build());
-        add(createSumCard(MaterialIcons.FUNCTIONS, totalBalanceLabel,
-                          I18n.getString("label.card.total_balance")),
-            gbc().row(1).fill(GridBagConstraints.HORIZONTAL).build());
-        add(createSumCard(MaterialIcons.ACCOUNT_BALANCE_WALLET, availableBalanceLabel,
-                          I18n.getString("label.card.available_balance")),
-            gbc().row(2).fill(GridBagConstraints.HORIZONTAL).build());
     }
 
     private Card createTopCard(@NotNull IconCode icon, @NotNull JLabel dataLabel, @NotNull String description) {
@@ -111,5 +100,45 @@ public class HomeTab extends WindowTab {
         sumCard.add(valueLabel, BorderLayout.EAST);
 
         return sumCard;
+    }
+
+    private void createSummaryCards() {
+
+        final var topCardsPanel = new JPanel();
+        final var layout = new GridLayout(1, 4);
+        layout.setHgap(16);
+        topCardsPanel.setLayout(layout);
+
+        topCardsPanel.add(createTopCard(MaterialIcons.ACCOUNT_BALANCE, accountBalanceLabel,
+                                        I18n.getString("label.card.account_balance")));
+        topCardsPanel.add(createTopCard(MaterialIcons.SAVINGS, savingsLabel,
+                                        I18n.getString("label.card.savings")));
+        topCardsPanel.add(createTopCard(MaterialIcons.PAYMENTS, cashLabel,
+                                        I18n.getString("label.card.cash")));
+        topCardsPanel.add(createTopCard(MaterialIcons.PENDING_ACTIONS, pendingOperationsLabel,
+                                        I18n.getString("label.card.pending")));
+
+        add(topCardsPanel, gbc().width(2).build());
+        add(createSumCard(MaterialIcons.FUNCTIONS, totalBalanceLabel,
+                          I18n.getString("label.card.total_balance")),
+            gbc().row(1).width(2).fill(GridBagConstraints.HORIZONTAL).build());
+        add(createSumCard(MaterialIcons.ACCOUNT_BALANCE_WALLET, availableBalanceLabel,
+                          I18n.getString("label.card.available_balance")),
+            gbc().row(2).width(2).fill(GridBagConstraints.HORIZONTAL).build());
+    }
+
+    private void createCharts() {
+
+        final var expensesBreakdownCard = new Card(new GridLayout());
+        expensesBreakdownCard.add(expensesBreakdown);
+        add(expensesBreakdownCard, gbc().row(3).weightX(2).fill(GridBagConstraints.BOTH)
+                                        .extPadding(16, 0, 0, 8).build());
+
+        final var revenuesBreakdownCard = new Card(new GridLayout());
+        revenuesBreakdownCard.add(revenuesBreakdown);
+        add(revenuesBreakdownCard, gbc().row(3).column(1).weightX(1).fill(GridBagConstraints.BOTH)
+                                        .extPadding(16, 8, 0, 0).build());
+
+        add(new SizeController(new Dimension(0, 384)), gbc().row(3).column(2).build());
     }
 }
