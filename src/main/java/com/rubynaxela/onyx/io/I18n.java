@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.TreeMap;
 
 /**
- * Internationalizaion utility.
+ * Internationalization utility.
  */
 public final class I18n {
 
