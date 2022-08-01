@@ -1,9 +1,9 @@
 package com.rubynaxela.onyx.gui.window;
 
-import com.rubynaxela.onyx.graphics.CircleShape;
-import com.rubynaxela.onyx.gui.event.ClickListener;
-import com.rubynaxela.onyx.gui.event.MouseDragListener;
-import com.rubynaxela.onyx.gui.event.PressAndReleaseListener;
+import com.rubynaxela.jadeite.swing.event.ClickListener;
+import com.rubynaxela.jadeite.swing.event.MouseDragListener;
+import com.rubynaxela.jadeite.swing.event.PressAndReleaseListener;
+import com.rubynaxela.jadeite.swing.graphics.CircleShape;
 import com.rubynaxela.onyx.util.Colors;
 import org.jetbrains.annotations.NotNull;
 

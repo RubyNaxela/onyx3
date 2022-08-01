@@ -1,6 +1,6 @@
 package com.rubynaxela.onyx.gui.animation;
 
-import com.rubynaxela.onyx.graphics.*;
+import com.rubynaxela.jadeite.swing.graphics.*;
 import com.rubynaxela.onyx.gui.window.MainWindow;
 import com.rubynaxela.onyx.util.Colors;
 import com.rubynaxela.onyx.io.IOUtils;

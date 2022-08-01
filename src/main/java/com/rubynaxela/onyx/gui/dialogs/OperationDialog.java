@@ -1,15 +1,16 @@
 package com.rubynaxela.onyx.gui.dialogs;
 
+import com.rubynaxela.jadeite.collections.JArrays;
+import com.rubynaxela.jadeite.collections.JVector;
+import com.rubynaxela.jadeite.pointers.Pointers;
+import com.rubynaxela.jadeite.util.OptionalGetter;
 import com.rubynaxela.onyx.data.*;
 import com.rubynaxela.onyx.gui.MaterialIcons;
 import com.rubynaxela.onyx.gui.ViewControllers;
 import com.rubynaxela.onyx.gui.components.Card;
 import com.rubynaxela.onyx.gui.components.IconButton;
 import com.rubynaxela.onyx.io.I18n;
-import com.rubynaxela.onyx.util.CommonUtils;
 import com.rubynaxela.onyx.util.ComponentUtils;
-import com.rubynaxela.onyx.util.OptionalGetter;
-import com.rubynaxela.onyx.util.VectorConstr;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -18,7 +19,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Objects;
 
-import static com.rubynaxela.onyx.gui.GridBagConstraintsBuilder.gbc;
+import static com.rubynaxela.jadeite.swing.GridBagConstraintsBuilder.gbc;
 
 public class OperationDialog extends Dialog {
 
@@ -71,7 +72,7 @@ public class OperationDialog extends Dialog {
 
         panel.add(new JLabel(I18n.getString("label.dialog.fragments")), gbc().row(3).width(4).build());
         final var addFragmentButton = new IconButton(I18n.getString("button.add"), MaterialIcons.ADD,
-                                                     new Insets(2, 8, 2, 12), CommonUtils.insetBottom(2));
+                                                     new Insets(2, 8, 2, 12), ComponentUtils.insetBottom(2));
         ComponentUtils.setFontSize(addFragmentButton, 12f);
         addFragmentButton.setIconSize(16f);
         addFragmentButton.addActionListener(e -> addFragmentPanel(null));
@@ -79,7 +80,7 @@ public class OperationDialog extends Dialog {
 
         fragmentsPanel.setLayout(new BoxLayout(fragmentsPanel, BoxLayout.Y_AXIS));
         panel.add(fragmentsPanel, gbc().row(4).width(4).fill(GridBagConstraints.HORIZONTAL).build());
-        operation.get(Operation::getFragments).orElse(VectorConstr.of((Operation.Fragment) null))
+        operation.get(Operation::getFragments).orElse(JVector.of((Operation.Fragment) null))
                  .forEach(this::addFragmentPanel);
 
         return panel;
@@ -91,7 +92,7 @@ public class OperationDialog extends Dialog {
             final var operation = new Operation(Date.valueOf(dateField.getText()), (int) ordinalSelector.getValue(),
                                                 contractorField.getText(),
                                                 Arrays.stream(fragmentsPanel.getComponents())
-                                                      .map(p -> ((FragmentPanel) p).get()).collect(VectorConstr.collector()));
+                                                      .map(p -> ((FragmentPanel) p).get()).collect(JVector.collector()));
             Database.INSTANCE.addOperation(operation);
             ViewControllers.REFRESH_OPERATIONS_LIST.run();
         }
@@ -107,8 +108,8 @@ public class OperationDialog extends Dialog {
             super(new GridBagLayout(), 4);
             ComponentUtils.addMargin(this, 4, 0, 0, 0);
             this.branch = OptionalGetter.of(branch);
-            this.categorySelector = new JComboBox<>(CommonUtils.sortedCopy(Category.values(), Category[]::new,
-                                                                           Comparator.comparing(I18n::getString)));
+            this.categorySelector = new JComboBox<>(JArrays.sortedCopy(Category.values(), Category[]::new,
+                                                                       Comparator.comparing(I18n::getString)));
             this.amountField = new JTextField();
             fillData();
         }
@@ -132,7 +133,7 @@ public class OperationDialog extends Dialog {
         }
 
         public Operation.Branch get() {
-            return new Operation.Branch(CommonUtils.requireNonNull(categorySelector.getSelectedItem()),
+            return new Operation.Branch(Pointers.requireNonNull(categorySelector.getSelectedItem()),
                                         Monetary.valueOf(amountField.getText()));
         }
     }
@@ -149,8 +150,8 @@ public class OperationDialog extends Dialog {
             ComponentUtils.addMargin(this, 4, 0, 0, 0);
             setColor(getColor().darker());
             this.fragment = OptionalGetter.of(fragment);
-            this.formSelector = new JComboBox<>(CommonUtils.sortedCopy(Form.values(), Form[]::new,
-                                                                       Comparator.comparingInt(f -> f.icon.getUnicode())));
+            this.formSelector = new JComboBox<>(JArrays.sortedCopy(Form.values(), Form[]::new,
+                                                                   Comparator.comparingInt(f -> f.icon.getUnicode())));
             this.descriptionField = new JTextField();
             this.branchesPanel = new JPanel();
             fillData();
@@ -173,7 +174,7 @@ public class OperationDialog extends Dialog {
 
             add(new JLabel(I18n.getString("label.dialog.categories")), gbc().row(2).width(2).build());
             final var addBranchButton = new IconButton(I18n.getString("button.add"), MaterialIcons.ADD,
-                                                       new Insets(2, 8, 2, 12), CommonUtils.insetBottom(2));
+                                                       new Insets(2, 8, 2, 12), ComponentUtils.insetBottom(2));
             ComponentUtils.setFontSize(addBranchButton, 12f);
             addBranchButton.setIconSize(16f);
             addBranchButton.addActionListener(e -> addBranchPanel(null));
@@ -181,7 +182,7 @@ public class OperationDialog extends Dialog {
 
             branchesPanel.setLayout(new BoxLayout(branchesPanel, BoxLayout.Y_AXIS));
             add(branchesPanel, gbc().row(3).width(2).fill(GridBagConstraints.HORIZONTAL).build());
-            fragment.get(Operation.Fragment::getBranches).orElse(VectorConstr.of((Operation.Branch) null))
+            fragment.get(Operation.Fragment::getBranches).orElse(JVector.of((Operation.Branch) null))
                     .forEach(this::addBranchPanel);
         }
 
@@ -196,10 +197,10 @@ public class OperationDialog extends Dialog {
         }
 
         public Operation.Fragment get() {
-            return new Operation.Fragment(CommonUtils.requireNonNull(formSelector.getSelectedItem()),
+            return new Operation.Fragment(Pointers.requireNonNull(formSelector.getSelectedItem()),
                                           descriptionField.getText(),
                                           Arrays.stream(branchesPanel.getComponents())
-                                                .map(p -> ((BranchPanel) p).get()).collect(VectorConstr.collector()));
+                                                .map(p -> ((BranchPanel) p).get()).collect(JVector.collector()));
         }
     }
 }

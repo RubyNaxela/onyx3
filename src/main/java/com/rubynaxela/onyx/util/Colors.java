@@ -1,5 +1,6 @@
 package com.rubynaxela.onyx.util;
 
+import com.rubynaxela.jadeite.annotations.FloatRange;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

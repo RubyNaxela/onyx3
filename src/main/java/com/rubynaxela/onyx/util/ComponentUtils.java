@@ -1,7 +1,5 @@
 package com.rubynaxela.onyx.util;
 
-import jiconfont.IconCode;
-import jiconfont.swing.IconFontSwing;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 
@@ -67,26 +65,12 @@ public final class ComponentUtils {
     }
 
     /**
-     * Creates a {@link JLabel} with an {@link ImageIcon} created from the
-     * specified icon. The icon's color is {@link Colors#LOGO_LIGHT_GRAY}
+     * Creates and initializes a new {@code Insets} object with the specified bottom inset value.
      *
-     * @param icon the icon to be used
-     * @param size the icon size
-     * @return a {@link JLabel} with an {@link ImageIcon}
+     * @param value the bottom inset value
+     * @return a new {@code Insets} object with the specified bottom inset value
      */
-    public static JLabel createIconLabel(@NotNull IconCode icon, float size) {
-        return new JLabel(IconFontSwing.buildIcon(icon, size, Colors.LOGO_LIGHT_GRAY));
-    }
-
-    /**
-     * Creates a {@link JLabel} with an {@link ImageIcon} created from the specified icon.
-     *
-     * @param icon  the icon to be used
-     * @param size  the icon size
-     * @param color the icon color
-     * @return a {@link JLabel} with an {@link ImageIcon}
-     */
-    public static JLabel createIconLabel(@NotNull IconCode icon, float size, @NotNull Color color) {
-        return new JLabel(IconFontSwing.buildIcon(icon, size, color));
+    public static Insets insetBottom(int value) {
+        return new Insets(0, 0, value, 0);
     }
 }

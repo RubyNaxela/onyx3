@@ -1,17 +1,17 @@
 package com.rubynaxela.onyx.gui.window;
 
 import com.formdev.flatlaf.util.Animator;
-import com.rubynaxela.onyx.gui.GridBagConstraintsBuilder;
+import com.rubynaxela.jadeite.swing.GridBagConstraintsBuilder;
+import com.rubynaxela.jadeite.swing.event.EnterAndExitListener;
 import com.rubynaxela.onyx.gui.MaterialIcons;
 import com.rubynaxela.onyx.gui.ViewControllers;
 import com.rubynaxela.onyx.gui.animation.Animation;
 import com.rubynaxela.onyx.gui.animation.FloatAnimation;
 import com.rubynaxela.onyx.gui.components.IconButton;
-import com.rubynaxela.onyx.gui.event.EnterAndExitListener;
 import com.rubynaxela.onyx.io.I18n;
 import com.rubynaxela.onyx.util.Colors;
 import com.rubynaxela.onyx.util.ComponentUtils;
-import com.rubynaxela.onyx.util.GraphicsUtils;
+import com.rubynaxela.onyx.util.ImageUtils;
 import jiconfont.IconCode;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,7 +43,7 @@ public class SidePanel extends JPanel {
         container.setPreferredSize(new Dimension(256, 512));
         container.setBackground(Colors.TRANSPARENT);
 
-        userLogo = new JLabel(new ImageIcon(GraphicsUtils.createCircleImage("/res/user_profile.png", 96, 96)));
+        userLogo = new JLabel(new ImageIcon(ImageUtils.createCircleImage("/res/user_profile.png", 96, 96)));
         ComponentUtils.addMargin(userLogo, 16, 80, 16, 80);
         container.add(userLogo);
 

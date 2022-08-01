@@ -1,10 +1,10 @@
 package com.rubynaxela.onyx.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.rubynaxela.jadeite.util.CachedGetter;
+import com.rubynaxela.jadeite.util.Pair;
+import com.rubynaxela.jadeite.util.S31N;
 import com.rubynaxela.onyx.gui.ViewControllers;
-import com.rubynaxela.onyx.io.S31N;
-import com.rubynaxela.onyx.util.CachedGetter;
-import com.rubynaxela.onyx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

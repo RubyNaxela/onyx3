@@ -1,5 +1,6 @@
 package com.rubynaxela.onyx.io;
 
+import com.rubynaxela.jadeite.util.S31N;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;

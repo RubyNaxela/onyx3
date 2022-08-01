@@ -2,7 +2,7 @@ package com.rubynaxela.onyx.gui.animation;
 
 import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.CubicBezierEasing;
-import com.rubynaxela.onyx.util.FloatRange;
+import com.rubynaxela.jadeite.annotations.FloatRange;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;

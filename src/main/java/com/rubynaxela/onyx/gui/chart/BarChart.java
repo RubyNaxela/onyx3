@@ -1,9 +1,9 @@
 package com.rubynaxela.onyx.gui.chart;
 
+import com.rubynaxela.jadeite.pointers.IntPointer;
+import com.rubynaxela.jadeite.swing.graphics.RectangleShape;
+import com.rubynaxela.jadeite.util.Pair;
 import com.rubynaxela.onyx.data.Database;
-import com.rubynaxela.onyx.graphics.RectangleShape;
-import com.rubynaxela.onyx.util.IntPointer;
-import com.rubynaxela.onyx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;

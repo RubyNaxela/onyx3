@@ -1,14 +1,15 @@
 package com.rubynaxela.onyx.gui.tabs;
 
+import com.rubynaxela.jadeite.swing.graphics.RectangleShape;
 import com.rubynaxela.onyx.data.Category;
 import com.rubynaxela.onyx.data.Database;
 import com.rubynaxela.onyx.data.Monetary;
-import com.rubynaxela.onyx.graphics.RectangleShape;
 import com.rubynaxela.onyx.gui.MaterialIcons;
 import com.rubynaxela.onyx.gui.ViewControllers;
 import com.rubynaxela.onyx.gui.chart.Charts;
 import com.rubynaxela.onyx.gui.components.Card;
 import com.rubynaxela.onyx.gui.components.ChartPanel;
+import com.rubynaxela.onyx.gui.components.Icon;
 import com.rubynaxela.onyx.io.I18n;
 import com.rubynaxela.onyx.util.Colors;
 import com.rubynaxela.onyx.util.ComponentUtils;
@@ -20,7 +21,7 @@ import java.awt.*;
 import java.util.Comparator;
 import java.util.Map;
 
-import static com.rubynaxela.onyx.gui.GridBagConstraintsBuilder.gbc;
+import static com.rubynaxela.jadeite.swing.GridBagConstraintsBuilder.gbc;
 
 /**
  * Represents the home panel. The size of this panel is 896x768.
@@ -71,7 +72,7 @@ public class HomeTab extends WindowTab {
         card.setLayout(new GridBagLayout());
 
         final var iconColor = UIManager.getColor("Button.focusedBorderColor").brighter().brighter();
-        final var iconLabel = ComponentUtils.createIconLabel(icon, 48f, iconColor);
+        final var iconLabel = new Icon(icon, 48f, iconColor);
         ComponentUtils.addMargin(iconLabel, 0, 16, 0, 0);
         card.add(iconLabel, gbc().height(2).anchor(GridBagConstraints.WEST).weightX(0).build());
 
@@ -93,7 +94,7 @@ public class HomeTab extends WindowTab {
         ComponentUtils.addMargin(sumCard, 16, 0, 0, 0);
 
         final var iconColor = UIManager.getColor("Button.focusedBorderColor").brighter().brighter();
-        final var iconLabel = ComponentUtils.createIconLabel(icon, 32f, iconColor);
+        final var iconLabel = new Icon(icon, 32f, iconColor);
         ComponentUtils.addMargin(iconLabel, 0, 16, 0, 0);
         sumCard.add(iconLabel, BorderLayout.WEST);
 
