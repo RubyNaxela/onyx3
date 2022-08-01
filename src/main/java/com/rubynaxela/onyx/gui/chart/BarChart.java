@@ -35,6 +35,7 @@ class BarChart {
                 final var bar = new RectangleShape((float) barWidth, height);
                 bar.setPosition((float) (i.incrementPostfix() * (barWidth + gapWidth)), size.height - height);
                 bar.setColor(pair.v2);
+                bar.setCornerRadius(4);
                 bars.add(bar);
             });
 

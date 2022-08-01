@@ -36,4 +36,8 @@ public final class Colors {
     public static Color withAlpha(@NotNull Color color, @FloatRange(from = 0, to = 1) float alpha) {
         return new Color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha);
     }
+
+    public static String cssValue(@NotNull Color color) {
+        return "rgba(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + "," + color.getAlpha() / 255f + ")";
+    }
 }

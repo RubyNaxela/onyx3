@@ -132,16 +132,23 @@ public class HomeTab extends WindowTab {
             gbc().row(2).width(2).fill(GridBagConstraints.HORIZONTAL).build());
     }
 
-    private JPanel createLegend(@NotNull Map<Category, Monetary> dataset) {
+    private JLabel createChartTitle(@NotNull String title) {
+        final var label = new JLabel(title);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        ComponentUtils.setFontParams(label, Font.BOLD, 16f);
+        ComponentUtils.addMargin(label, 0, 0, 16, 0);
+        return label;
+    }
+
+    private JPanel createChartLegend(@NotNull Map<Category, Monetary> dataset) {
         final var panel = new JPanel(new GridLayout(0, 1));
         panel.setBackground(Colors.TRANSPARENT);
         dataset.entrySet().stream().sorted(Comparator.comparing(e -> e.getValue().negativeAbsolute())).forEach(e -> {
             final var colorPreview = new RectangleShape(16, 16);
             colorPreview.setColor(e.getKey().color);
             final var label = new JLabel();
-            final var color = label.getForeground();
-            label.setText("<html>" + I18n.getString(e.getKey()) + " :: <span style=\"color:rgba(" +
-                          color.getRed() + "," + color.getGreen() + "," + color.getBlue() + ",0.5)\">" +
+            label.setText("<html>" + I18n.getString(e.getKey()) + " :: <span style=\"color:" +
+                          Colors.cssValue(Colors.withAlpha(label.getForeground(), 0.5f)) + "\">" +
                           e.getValue().absolute() + "</span></html>");
             label.setIcon(new ImageIcon(colorPreview.createImage()));
             ComponentUtils.addMargin(label, 2, 0, 2, 0);
@@ -153,16 +160,18 @@ public class HomeTab extends WindowTab {
     private void createCharts() {
 
         final var expensesBreakdownCard = new Card(new GridBagLayout());
-        expensesBreakdownCard.add(expensesBreakdown, gbc().weightX(1).weightY(1).fill(GridBagConstraints.BOTH).build());
-        expensesBreakdownCard.add(createLegend(Database.INSTANCE.wGetExpensesByCategory()),
-                                  gbc().column(1).extPaddingLeft(16).build());
+        expensesBreakdownCard.add(createChartTitle(I18n.getString("title.chart.expenses_breakdown")));
+        expensesBreakdownCard.add(expensesBreakdown, gbc().row(1).weightX(1).weightY(1).fill(GridBagConstraints.BOTH).build());
+        expensesBreakdownCard.add(createChartLegend(Database.INSTANCE.wGetExpensesByCategory()),
+                                  gbc().column(1).height(2).extPaddingLeft(16).build());
         add(expensesBreakdownCard, gbc().row(3).weightX(1).fill(GridBagConstraints.BOTH)
                                         .extPadding(16, 0, 0, 8).build());
 
         final var revenuesBreakdownCard = new Card(new GridBagLayout());
-        revenuesBreakdownCard.add(revenuesBreakdown, gbc().weightX(1).weightY(1).fill(GridBagConstraints.BOTH).build());
-        revenuesBreakdownCard.add(createLegend(Database.INSTANCE.wGetRevenuesByCategory()),
-                                  gbc().row(1).anchor(GridBagConstraints.WEST).extPaddingTop(16).build());
+        revenuesBreakdownCard.add(createChartTitle(I18n.getString("title.chart.revenues_breakdown")));
+        revenuesBreakdownCard.add(revenuesBreakdown, gbc().row(1).weightX(1).weightY(1).fill(GridBagConstraints.BOTH).build());
+        revenuesBreakdownCard.add(createChartLegend(Database.INSTANCE.wGetRevenuesByCategory()),
+                                  gbc().row(2).anchor(GridBagConstraints.WEST).extPaddingTop(16).build());
         add(revenuesBreakdownCard, gbc().row(3).column(1).fill(GridBagConstraints.VERTICAL)
                                         .extPadding(16, 8, 0, 0).build());
     }

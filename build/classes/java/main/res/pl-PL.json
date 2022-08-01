@@ -56,5 +56,7 @@
   "label.tab.invoices": "Rachunki",
   "label.tab.pending": "Operacje oczekujące",
   "label.tooltip.search": "Wyszukaj...",
+  "title.chart.expenses_breakdown": "Analiza wydatków",
+  "title.chart.revenues_breakdown": "Analiza przychodów",
   "title.dialog.new_operation": "Nowa operacja"
 }
