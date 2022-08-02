@@ -1,5 +1,6 @@
 package com.rubynaxela.onyx.gui.tabs;
 
+import com.rubynaxela.jadeite.awt.JColor;
 import com.rubynaxela.jadeite.awt.graphics.RectangleShape;
 import com.rubynaxela.onyx.data.Category;
 import com.rubynaxela.onyx.data.Database;
@@ -149,7 +150,7 @@ public class HomeTab extends WindowTab {
             colorPreview.setColor(e.getKey().color);
             final var label = new JLabel();
             label.setText("<html>" + I18n.getString(e.getKey()) + " :: <span style=\"color:" +
-                          Colors.cssValue(Colors.withAlpha(label.getForeground(), 0.5f)) + "\">" +
+                          new JColor(label.getForeground()).withAlpha(0.5f).cssValue() + "\">" +
                           e.getValue().absolute() + "</span></html>");
             label.setIcon(new ImageIcon(colorPreview.createImage()));
             ComponentUtils.addMargin(label, 2, 0, 2, 0);
@@ -173,7 +174,7 @@ public class HomeTab extends WindowTab {
         revenuesBreakdownCard.add(revenuesBreakdown, gbc().row(1).weightX(1).weightY(1).fill(GridBagConstraints.BOTH));
         revenuesBreakdownCard.add(createChartLegend(Database.INSTANCE.wGetRevenuesByCategory()),
                                   gbc().row(2).anchor(GridBagConstraints.WEST).extPaddingTop(16));
-        add(revenuesBreakdownCard, gbc().position(1,3).fill(GridBagConstraints.VERTICAL)
+        add(revenuesBreakdownCard, gbc().position(1, 3).fill(GridBagConstraints.VERTICAL)
                                         .extPadding(16, 8, 0, 0));
     }
 }

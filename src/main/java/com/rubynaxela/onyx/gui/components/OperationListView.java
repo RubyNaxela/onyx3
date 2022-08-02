@@ -1,5 +1,6 @@
 package com.rubynaxela.onyx.gui.components;
 
+import com.rubynaxela.jadeite.awt.JColor;
 import com.rubynaxela.onyx.data.Form;
 import com.rubynaxela.onyx.data.Operation;
 import com.rubynaxela.onyx.gui.MaterialIcons;
@@ -51,7 +52,7 @@ public class OperationListView extends Card {
 
         final var idLabel = new JLabel(operation.wGetId());
         idLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        idLabel.setForeground(Colors.withAlpha(idLabel.getForeground(), 0.5f));
+        idLabel.setForeground(new JColor(idLabel.getForeground()).withAlpha(0.5f));
         ComponentUtils.setFontSize(idLabel, 12f);
         leftPanel.add(idLabel);
 
@@ -94,7 +95,7 @@ public class OperationListView extends Card {
 
         final var descriptionArea = new JTextArea(operation.wGetDescription());
         descriptionArea.setBackground(Colors.TRANSPARENT);
-        descriptionArea.setForeground(Colors.withAlpha(descriptionArea.getForeground(), 0.8f));
+        descriptionArea.setForeground(new JColor(descriptionArea.getForeground()).withAlpha(0.8f));
         ComponentUtils.setFontParams(descriptionArea, Font.ITALIC, 12f);
         middlePanel.add(descriptionArea);
 

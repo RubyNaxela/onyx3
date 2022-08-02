@@ -1,9 +1,5 @@
 package com.rubynaxela.onyx.util;
 
-import com.rubynaxela.jadeite.annotations.FloatRange;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-
 import java.awt.*;
 
 /**
@@ -30,15 +26,5 @@ public final class Colors {
     public static Color EXPENSE_COLOR = new Color(255, 97, 177);
 
     private Colors() {
-    }
-
-    @NotNull
-    @Contract(pure = true, value = "_, _ -> new")
-    public static Color withAlpha(@NotNull Color color, @FloatRange(from = 0, to = 1) float alpha) {
-        return new Color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha);
-    }
-
-    public static String cssValue(@NotNull Color color) {
-        return "rgba(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + "," + color.getAlpha() / 255f + ")";
     }
 }

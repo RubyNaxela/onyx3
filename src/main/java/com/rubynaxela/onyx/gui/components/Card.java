@@ -1,5 +1,8 @@
 package com.rubynaxela.onyx.gui.components;
 
+import com.rubynaxela.jadeite.awt.JColor;
+import com.rubynaxela.jadeite.awt.JInsets;
+import com.rubynaxela.jadeite.util.OptionalGetter;
 import com.rubynaxela.onyx.util.Colors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,19 +12,27 @@ import java.awt.*;
 
 public class Card extends JPanel {
 
-    public static final Color DEFAULT_COLOR = UIManager.getColor("Desktop.background").brighter();
-    private final int padding;
-    private Color color;
+    public static final JColor DEFAULT_COLOR = new JColor(UIManager.getColor("Desktop.background")).brighter();
+    private final JInsets padding;
+    private JColor color;
 
-    public Card(@NotNull LayoutManager manager, int padding) {
+    public Card(@NotNull LayoutManager manager, @NotNull JInsets padding) {
         super(manager);
         this.padding = padding;
         this.color = DEFAULT_COLOR;
         setBackground(Colors.TRANSPARENT);
     }
 
+    public Card(@NotNull LayoutManager manager, int padding) {
+        this(manager, JInsets.of(padding));
+    }
+
     public Card(@NotNull LayoutManager manager) {
         this(manager, 16);
+    }
+
+    public Card(@NotNull JInsets padding) {
+        this(new FlowLayout(), padding);
     }
 
     public Card(int padding) {
@@ -32,12 +43,12 @@ public class Card extends JPanel {
         this(16);
     }
 
-    public Color getColor() {
+    public JColor getColor() {
         return color;
     }
 
     public void setColor(@Nullable Color color) {
-        this.color = color;
+        this.color = OptionalGetter.ofNullable(color).get(JColor::new).orElse(null);
     }
 
     /**
@@ -76,7 +87,6 @@ public class Card extends JPanel {
 
     @Override
     public Insets getInsets() {
-        final var insets = super.getInsets();
-        return new Insets(insets.top + padding, insets.left + padding, insets.bottom + padding, insets.right + padding);
+        return JInsets.add(super.getInsets(), padding);
     }
 }

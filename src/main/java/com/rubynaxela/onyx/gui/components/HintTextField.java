@@ -1,24 +1,23 @@
 package com.rubynaxela.onyx.gui.components;
 
-import com.rubynaxela.onyx.util.Colors;
+import com.rubynaxela.jadeite.awt.JColor;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 public class HintTextField extends JTextField implements FocusListener {
 
     private final String hintText;
+    private final JColor baseForeground;
     private boolean hintDisplayed = true;
-    private Color baseForeground;
 
     public HintTextField(@Nullable String hint) {
         super(hint);
         this.hintText = hint;
-        this.baseForeground = getForeground();
-        setForeground(Colors.withAlpha(baseForeground, 0.5f));
+        this.baseForeground = new JColor(getForeground());
+        setForeground(baseForeground.withAlpha(0.5f));
         addFocusListener(this);
     }
 
@@ -33,7 +32,7 @@ public class HintTextField extends JTextField implements FocusListener {
     public void focusLost(FocusEvent e) {
         if (getText().isEmpty()) {
             setText(hintText);
-            setForeground(Colors.withAlpha(baseForeground, 0.5f));
+            setForeground(baseForeground.withAlpha(0.5f));
             hintDisplayed = true;
         }
     }
