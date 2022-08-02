@@ -47,6 +47,7 @@
   "label.common.date": "Data",
   "label.common.description": "Opis",
   "label.common.form": "Forma",
+  "label.common.operation_id": "ID operacji",
   "label.dialog.categories": "Kategorie",
   "label.dialog.fragments": "Fragmenty",
   "label.dialog.operation_details": "Wprowadź szczegóły operacji",
@@ -58,5 +59,6 @@
   "label.tooltip.search": "Wyszukaj...",
   "title.chart.expenses_breakdown": "Analiza wydatków",
   "title.chart.revenues_breakdown": "Analiza przychodów",
-  "title.dialog.new_operation": "Nowa operacja"
+  "title.dialog.new_operation": "Nowa operacja",
+  "title.panel.operation_[id]": "Operacja %s"
 }
