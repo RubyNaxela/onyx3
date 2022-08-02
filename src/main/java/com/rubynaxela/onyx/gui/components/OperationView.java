@@ -24,7 +24,7 @@ public class OperationView extends JPanel {
     }
 
     public void setOperation(@Nullable Operation op) {
-        this.operation = OptionalGetter.of(op);
+        this.operation = OptionalGetter.ofNullable(op);
         date.setText(operation.getString(Operation::getDate).orElse(""));
         id.setText(operation.get(Operation::wGetId).orElse(""));
         contractor.setText(operation.get(Operation::getContractor).orElse(""));

@@ -1,5 +1,6 @@
 package com.rubynaxela.onyx.gui.components;
 
+import com.rubynaxela.jadeite.awt.AWTConstants;
 import com.rubynaxela.onyx.util.ComponentUtils;
 import jiconfont.IconCode;
 import jiconfont.swing.IconFontSwing;
@@ -30,7 +31,7 @@ public class IconButton extends JButton {
     }
 
     public IconButton(@NotNull String text, @NotNull IconCode icon, @NotNull Insets border) {
-        this(text, icon, ComponentUtils.ZERO_INSETS, border);
+        this(text, icon, AWTConstants.ZERO_INSETS, border);
     }
 
     /**

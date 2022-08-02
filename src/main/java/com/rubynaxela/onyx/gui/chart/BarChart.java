@@ -1,7 +1,7 @@
 package com.rubynaxela.onyx.gui.chart;
 
+import com.rubynaxela.jadeite.awt.graphics.RectangleShape;
 import com.rubynaxela.jadeite.pointers.IntPointer;
-import com.rubynaxela.jadeite.swing.graphics.RectangleShape;
 import com.rubynaxela.jadeite.util.Pair;
 import com.rubynaxela.onyx.data.Database;
 import org.jetbrains.annotations.NotNull;

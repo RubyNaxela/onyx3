@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Objects;
 
-import static com.rubynaxela.jadeite.swing.GridBagConstraintsBuilder.gbc;
+import static com.rubynaxela.jadeite.awt.JGridBagConstraints.gbc;
 
 public class OperationDialog extends Dialog {
 
@@ -30,7 +30,7 @@ public class OperationDialog extends Dialog {
 
     public OperationDialog(@Nullable Operation operation) {
         super(I18n.getString("title.dialog.new_operation"), JOptionPane.OK_CANCEL_OPTION);
-        this.operation = OptionalGetter.of(operation);
+        this.operation = OptionalGetter.ofNullable(operation);
         this.dateField = new JTextField();
         this.ordinalSelector = new JSpinner();
         this.contractorField = new JTextField();
@@ -51,35 +51,35 @@ public class OperationDialog extends Dialog {
     protected JComponent getContent() {
         final var panel = new JPanel(new GridBagLayout());
 
-        panel.add(new JLabel(I18n.getString("label.dialog.operation_details")), gbc().width(4).extPadding(8, 0, 16, 0).build());
+        panel.add(new JLabel(I18n.getString("label.dialog.operation_details")), gbc().width(4).extPadding(8, 0, 16, 0));
 
         final var dateLabel = new JLabel(I18n.getString("label.common.date"));
         dateLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        panel.add(dateLabel, gbc().row(1).fill(GridBagConstraints.HORIZONTAL).build());
+        panel.add(dateLabel, gbc().row(1).fill(GridBagConstraints.HORIZONTAL));
         dateField.setText(operation.get(Operation::getDate).orElse(Date.today()).toString());
-        panel.add(dateField, gbc().row(1).column(1).build());
+        panel.add(dateField, gbc().position(1, 1));
 
-        panel.add(new JLabel(I18n.getString("label.dialog.ordinal_in_week")), gbc().row(1).column(2).build());
+        panel.add(new JLabel(I18n.getString("label.dialog.ordinal_in_week")), gbc().position(2, 1));
         ordinalSelector.setModel(new SpinnerNumberModel(operation.get(Operation::getOrdinalInWeek).orElse(1).intValue(),
                                                         1, 100, 1));
-        panel.add(ordinalSelector, gbc().row(1).column(3).build());
+        panel.add(ordinalSelector, gbc().position(3, 1));
 
         final var contractorLabel = new JLabel(I18n.getString("label.common.contractor"));
         contractorLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        panel.add(contractorLabel, gbc().row(2).fill(GridBagConstraints.HORIZONTAL).build());
+        panel.add(contractorLabel, gbc().row(2).fill(GridBagConstraints.HORIZONTAL));
         contractorField.setText(operation.get(Operation::getContractor).orElse(""));
-        panel.add(contractorField, gbc().row(2).column(1).width(3).fill(GridBagConstraints.HORIZONTAL).build());
+        panel.add(contractorField, gbc().position(1, 2).width(3).fill(GridBagConstraints.HORIZONTAL));
 
-        panel.add(new JLabel(I18n.getString("label.dialog.fragments")), gbc().row(3).width(4).build());
+        panel.add(new JLabel(I18n.getString("label.dialog.fragments")), gbc().row(3).width(4));
         final var addFragmentButton = new IconButton(I18n.getString("button.add"), MaterialIcons.ADD,
                                                      new Insets(2, 8, 2, 12), ComponentUtils.insetBottom(2));
         ComponentUtils.setFontSize(addFragmentButton, 12f);
         addFragmentButton.setIconSize(16f);
         addFragmentButton.addActionListener(e -> addFragmentPanel(null));
-        panel.add(addFragmentButton, gbc().row(3).column(2).width(2).anchor(GridBagConstraints.EAST).build());
+        panel.add(addFragmentButton, gbc().position(2, 3).width(2).anchor(GridBagConstraints.EAST));
 
         fragmentsPanel.setLayout(new BoxLayout(fragmentsPanel, BoxLayout.Y_AXIS));
-        panel.add(fragmentsPanel, gbc().row(4).width(4).fill(GridBagConstraints.HORIZONTAL).build());
+        panel.add(fragmentsPanel, gbc().row(4).width(4).fill(GridBagConstraints.HORIZONTAL));
         operation.get(Operation::getFragments).orElse(JVector.of((Operation.Fragment) null))
                  .forEach(this::addFragmentPanel);
 
@@ -107,7 +107,7 @@ public class OperationDialog extends Dialog {
         public BranchPanel(@Nullable Operation.Branch branch) {
             super(new GridBagLayout(), 4);
             ComponentUtils.addMargin(this, 4, 0, 0, 0);
-            this.branch = OptionalGetter.of(branch);
+            this.branch = OptionalGetter.ofNullable(branch);
             this.categorySelector = new JComboBox<>(JArrays.sortedCopy(Category.values(), Category[]::new,
                                                                        Comparator.comparing(I18n::getString)));
             this.amountField = new JTextField();
@@ -118,18 +118,18 @@ public class OperationDialog extends Dialog {
 
             final var categoryLabel = new JLabel(I18n.getString("label.common.category"));
             categoryLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-            add(categoryLabel, gbc().fill(GridBagConstraints.HORIZONTAL).build());
+            add(categoryLabel, gbc().fill(GridBagConstraints.HORIZONTAL));
             categorySelector.setRenderer((list, value, index, isSelected, cellHasFocus) -> value.view);
             categorySelector.setSelectedItem(branch.get(Operation.Branch::getCategory).orElse(Category.OTHER));
-            add(categorySelector, gbc().column(1).width(2).fill(GridBagConstraints.HORIZONTAL).build());
+            add(categorySelector, gbc().column(1).width(2).fill(GridBagConstraints.HORIZONTAL));
 
             final var amountLabel = new JLabel(I18n.getString("label.common.amount"));
-            add(amountLabel, gbc().row(1).fill(GridBagConstraints.HORIZONTAL).build());
+            add(amountLabel, gbc().row(1).fill(GridBagConstraints.HORIZONTAL));
             amountField.setText(branch.get(Operation.Branch::getAmount).orElse(Monetary.ZERO).toString(""));
             amountField.setHorizontalAlignment(SwingConstants.RIGHT);
-            add(amountField, gbc().row(1).column(1).fill(GridBagConstraints.HORIZONTAL).build());
+            add(amountField, gbc().position(1, 1).fill(GridBagConstraints.HORIZONTAL));
             final var currencyLabel = new JLabel(Monetary.getSymbol());
-            add(currencyLabel, gbc().row(1).column(2).fill(GridBagConstraints.HORIZONTAL).build());
+            add(currencyLabel, gbc().position(2, 1).fill(GridBagConstraints.HORIZONTAL));
         }
 
         public Operation.Branch get() {
@@ -149,7 +149,7 @@ public class OperationDialog extends Dialog {
             super(new GridBagLayout(), 4);
             ComponentUtils.addMargin(this, 4, 0, 0, 0);
             setColor(getColor().darker());
-            this.fragment = OptionalGetter.of(fragment);
+            this.fragment = OptionalGetter.ofNullable(fragment);
             this.formSelector = new JComboBox<>(JArrays.sortedCopy(Form.values(), Form[]::new,
                                                                    Comparator.comparingInt(f -> f.icon.getUnicode())));
             this.descriptionField = new JTextField();
@@ -161,27 +161,27 @@ public class OperationDialog extends Dialog {
 
             final var formLabel = new JLabel(I18n.getString("label.common.form"));
             formLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-            add(formLabel, gbc().fill(GridBagConstraints.HORIZONTAL).build());
+            add(formLabel, gbc().fill(GridBagConstraints.HORIZONTAL));
             formSelector.setRenderer((list, value, index, isSelected, cellHasFocus) -> value.view);
             formSelector.setSelectedItem(fragment.get(Operation.Fragment::getForm).orElse(Form.OTHER));
-            add(formSelector, gbc().column(1).fill(GridBagConstraints.HORIZONTAL).build());
+            add(formSelector, gbc().column(1).fill(GridBagConstraints.HORIZONTAL));
 
             final var descriptionLabel = new JLabel(I18n.getString("label.common.description"));
             descriptionLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-            add(descriptionLabel, gbc().row(1).fill(GridBagConstraints.HORIZONTAL).build());
+            add(descriptionLabel, gbc().row(1).fill(GridBagConstraints.HORIZONTAL));
             descriptionField.setText(fragment.get(Operation.Fragment::getDescription).orElse(""));
-            add(descriptionField, gbc().row(1).column(1).fill(GridBagConstraints.HORIZONTAL).build());
+            add(descriptionField, gbc().position(1, 1).fill(GridBagConstraints.HORIZONTAL));
 
-            add(new JLabel(I18n.getString("label.dialog.categories")), gbc().row(2).width(2).build());
+            add(new JLabel(I18n.getString("label.dialog.categories")), gbc().row(2).width(2));
             final var addBranchButton = new IconButton(I18n.getString("button.add"), MaterialIcons.ADD,
                                                        new Insets(2, 8, 2, 12), ComponentUtils.insetBottom(2));
             ComponentUtils.setFontSize(addBranchButton, 12f);
             addBranchButton.setIconSize(16f);
             addBranchButton.addActionListener(e -> addBranchPanel(null));
-            add(addBranchButton, gbc().row(2).column(1).anchor(GridBagConstraints.EAST).build());
+            add(addBranchButton, gbc().position(1, 2).anchor(GridBagConstraints.EAST));
 
             branchesPanel.setLayout(new BoxLayout(branchesPanel, BoxLayout.Y_AXIS));
-            add(branchesPanel, gbc().row(3).width(2).fill(GridBagConstraints.HORIZONTAL).build());
+            add(branchesPanel, gbc().row(3).width(2).fill(GridBagConstraints.HORIZONTAL));
             fragment.get(Operation.Fragment::getBranches).orElse(JVector.of((Operation.Branch) null))
                     .forEach(this::addBranchPanel);
         }

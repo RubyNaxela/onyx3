@@ -1,6 +1,6 @@
 package com.rubynaxela.onyx.util;
 
-import com.rubynaxela.jadeite.swing.graphics.GraphicsUtils;
+import com.rubynaxela.jadeite.awt.graphics.GraphicsUtils;
 import com.rubynaxela.onyx.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 

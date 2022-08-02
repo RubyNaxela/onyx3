@@ -11,8 +11,6 @@ import java.awt.*;
 
 public final class ComponentUtils {
 
-    public static final Insets ZERO_INSETS = new Insets(0, 0, 0, 0);
-
     private ComponentUtils() {
     }
 

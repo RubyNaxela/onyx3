@@ -1,9 +1,9 @@
 package com.rubynaxela.onyx.gui.animation;
 
-import com.rubynaxela.jadeite.swing.graphics.*;
+import com.rubynaxela.jadeite.awt.graphics.*;
 import com.rubynaxela.onyx.gui.window.MainWindow;
-import com.rubynaxela.onyx.util.Colors;
 import com.rubynaxela.onyx.io.IOUtils;
+import com.rubynaxela.onyx.util.Colors;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

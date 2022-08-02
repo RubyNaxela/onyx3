@@ -1,8 +1,7 @@
 package com.rubynaxela.onyx.gui.window;
 
 import com.formdev.flatlaf.util.Animator;
-import com.rubynaxela.jadeite.swing.GridBagConstraintsBuilder;
-import com.rubynaxela.jadeite.swing.event.EnterAndExitListener;
+import com.rubynaxela.jadeite.awt.event.EnterAndExitListener;
 import com.rubynaxela.onyx.gui.MaterialIcons;
 import com.rubynaxela.onyx.gui.ViewControllers;
 import com.rubynaxela.onyx.gui.animation.Animation;
@@ -20,6 +19,8 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.rubynaxela.jadeite.awt.JGridBagConstraints.gbc;
 
 /**
  * Represents the side panel with menu and user profile information. The size of this panel is 256x768.
@@ -91,7 +92,7 @@ public class SidePanel extends JPanel {
         }
 
         public void add(@NotNull JButton button) {
-            super.add(button, GridBagConstraintsBuilder.gbc().row(buttons.size()).build());
+            super.add(button, gbc().row(buttons.size()));
             buttons.add(button);
         }
     }

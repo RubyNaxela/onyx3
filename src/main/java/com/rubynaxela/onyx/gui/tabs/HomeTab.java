@@ -1,6 +1,6 @@
 package com.rubynaxela.onyx.gui.tabs;
 
-import com.rubynaxela.jadeite.swing.graphics.RectangleShape;
+import com.rubynaxela.jadeite.awt.graphics.RectangleShape;
 import com.rubynaxela.onyx.data.Category;
 import com.rubynaxela.onyx.data.Database;
 import com.rubynaxela.onyx.data.Monetary;
@@ -21,7 +21,7 @@ import java.awt.*;
 import java.util.Comparator;
 import java.util.Map;
 
-import static com.rubynaxela.jadeite.swing.GridBagConstraintsBuilder.gbc;
+import static com.rubynaxela.jadeite.awt.JGridBagConstraints.gbc;
 
 /**
  * Represents the home panel. The size of this panel is 896x768.
@@ -74,15 +74,15 @@ public class HomeTab extends WindowTab {
         final var iconColor = UIManager.getColor("Button.focusedBorderColor").brighter().brighter();
         final var iconLabel = new Icon(icon, 48f, iconColor);
         ComponentUtils.addMargin(iconLabel, 0, 16, 0, 0);
-        card.add(iconLabel, gbc().height(2).anchor(GridBagConstraints.WEST).weightX(0).build());
+        card.add(iconLabel, gbc().height(2).anchor(GridBagConstraints.WEST).weightX(0));
 
         ComponentUtils.setFontParams(dataLabel, Font.BOLD, 16f);
-        card.add(dataLabel, gbc().position(0, 1).anchor(GridBagConstraints.WEST).weightX(1).extPaddingTop(2).build());
+        card.add(dataLabel, gbc().position(1, 0).anchor(GridBagConstraints.WEST).weightX(1).extPaddingTop(2));
 
         final var descriptionLabel = new JLabel(description);
         ComponentUtils.setFontSize(descriptionLabel, 11f);
         descriptionLabel.setForeground(descriptionLabel.getForeground().darker());
-        card.add(descriptionLabel, gbc().position(1, 1).anchor(GridBagConstraints.WEST).weightX(1).extPaddingTop(6).build());
+        card.add(descriptionLabel, gbc().position(1, 1).anchor(GridBagConstraints.WEST).weightX(1).extPaddingTop(6));
 
         return card;
     }
@@ -124,13 +124,13 @@ public class HomeTab extends WindowTab {
         topCardsPanel.add(createTopCard(MaterialIcons.PENDING_ACTIONS, pendingOperationsLabel,
                                         I18n.getString("label.card.pending")));
 
-        add(topCardsPanel, gbc().width(2).build());
+        add(topCardsPanel, gbc().width(2));
         add(createSumCard(MaterialIcons.FUNCTIONS, totalBalanceLabel,
                           I18n.getString("label.card.total_balance")),
-            gbc().row(1).width(2).fill(GridBagConstraints.HORIZONTAL).build());
+            gbc().row(1).width(2).fill(GridBagConstraints.HORIZONTAL));
         add(createSumCard(MaterialIcons.ACCOUNT_BALANCE_WALLET, availableBalanceLabel,
                           I18n.getString("label.card.available_balance")),
-            gbc().row(2).width(2).fill(GridBagConstraints.HORIZONTAL).build());
+            gbc().row(2).width(2).fill(GridBagConstraints.HORIZONTAL));
     }
 
     private JLabel createChartTitle(@NotNull String title) {
@@ -162,18 +162,18 @@ public class HomeTab extends WindowTab {
 
         final var expensesBreakdownCard = new Card(new GridBagLayout());
         expensesBreakdownCard.add(createChartTitle(I18n.getString("title.chart.expenses_breakdown")));
-        expensesBreakdownCard.add(expensesBreakdown, gbc().row(1).weightX(1).weightY(1).fill(GridBagConstraints.BOTH).build());
+        expensesBreakdownCard.add(expensesBreakdown, gbc().row(1).weightX(1).weightY(1).fill(GridBagConstraints.BOTH));
         expensesBreakdownCard.add(createChartLegend(Database.INSTANCE.wGetExpensesByCategory()),
-                                  gbc().column(1).height(2).extPaddingLeft(16).build());
+                                  gbc().column(1).height(2).extPaddingLeft(16));
         add(expensesBreakdownCard, gbc().row(3).weightX(1).fill(GridBagConstraints.BOTH)
-                                        .extPadding(16, 0, 0, 8).build());
+                                        .extPadding(16, 0, 0, 8));
 
         final var revenuesBreakdownCard = new Card(new GridBagLayout());
         revenuesBreakdownCard.add(createChartTitle(I18n.getString("title.chart.revenues_breakdown")));
-        revenuesBreakdownCard.add(revenuesBreakdown, gbc().row(1).weightX(1).weightY(1).fill(GridBagConstraints.BOTH).build());
+        revenuesBreakdownCard.add(revenuesBreakdown, gbc().row(1).weightX(1).weightY(1).fill(GridBagConstraints.BOTH));
         revenuesBreakdownCard.add(createChartLegend(Database.INSTANCE.wGetRevenuesByCategory()),
-                                  gbc().row(2).anchor(GridBagConstraints.WEST).extPaddingTop(16).build());
-        add(revenuesBreakdownCard, gbc().row(3).column(1).fill(GridBagConstraints.VERTICAL)
-                                        .extPadding(16, 8, 0, 0).build());
+                                  gbc().row(2).anchor(GridBagConstraints.WEST).extPaddingTop(16));
+        add(revenuesBreakdownCard, gbc().position(1,3).fill(GridBagConstraints.VERTICAL)
+                                        .extPadding(16, 8, 0, 0));
     }
 }

@@ -1,7 +1,7 @@
 package com.rubynaxela.onyx.gui.animation;
 
-import com.rubynaxela.jadeite.swing.graphics.Vector3i;
 import com.rubynaxela.jadeite.annotations.FloatRange;
+import com.rubynaxela.jadeite.awt.graphics.Vector3i;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
