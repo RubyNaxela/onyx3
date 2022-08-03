@@ -84,8 +84,12 @@ public class Operation implements Comparable<Operation> {
         return wGetId().compareTo(other.wGetId());
     }
 
-    public boolean isInternalTransfer() {
+    public boolean wIsInternalTransfer() {
         return fragments.get(0).branches.get(0).category == Category.INTERNAL_TRANSFER;
+    }
+
+    public boolean wIsSingleBranch() {
+        return fragments.size() == 1 && fragments.get(0).branches.size() == 1;
     }
 
     public static class Fragment {
@@ -130,12 +134,16 @@ public class Operation implements Comparable<Operation> {
             return branches.stream();
         }
 
+        public Monetary wGetTotalAmount() {
+            return Monetary.sum(branches.stream().map(Branch::getAmount));
+        }
+
         public boolean wIsCashOperation() {
             return form == Form.CASH_PAYMENT || form == Form.CASH_REVENUE;
         }
 
-        public Monetary wGetTotalAmount() {
-            return Monetary.sum(branches.stream().map(Branch::getAmount));
+        public boolean wIsSingleBranch() {
+            return branches.size() == 1;
         }
     }
 
