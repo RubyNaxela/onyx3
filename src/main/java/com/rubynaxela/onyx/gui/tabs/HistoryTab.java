@@ -55,7 +55,7 @@ public class HistoryTab extends WindowTab {
         final var operations = Database.INSTANCE.getOperations();
         final var listView = new JList<Operation>();
         listView.setLayout(new GridBagLayout());
-        listView.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> new OperationListView(value));
+        listView.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> new OperationListView(value, isSelected));
         listView.setListData(operations);
         listView.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listView.addListSelectionListener(e -> operationPreviewPanel.setOperation(operations.get(e.getFirstIndex())));

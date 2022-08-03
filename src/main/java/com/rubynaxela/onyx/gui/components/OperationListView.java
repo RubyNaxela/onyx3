@@ -16,10 +16,11 @@ public class OperationListView extends Card {
 
     private final Operation operation;
 
-    public OperationListView(@NotNull Operation operation) {
+    public OperationListView(@NotNull Operation operation, boolean isSelected) {
         super(8);
         this.operation = operation;
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        if (isSelected) setColor(getColor().brighter(0.8f));
         ComponentUtils.addMargin(this, 0, 0, 8, 0);
 
         final Icon leftIcon = operation.positive() ? new Icon(MaterialIcons.ARROW_UPWARD, 36f, Colors.INCOME_COLOR) :
@@ -69,7 +70,7 @@ public class OperationListView extends Card {
         contractorAndFormPanel.setLayout(new BoxLayout(contractorAndFormPanel, BoxLayout.X_AXIS));
         contractorAndFormPanel.setBackground(Colors.TRANSPARENT);
 
-        if (!operation.isInternalTransfer()) {
+        if (!operation.wIsInternalTransfer()) {
             operation.getFragments().stream().map(Operation.Fragment::getForm).collect(Collectors.toSet())
                      .forEach(c -> contractorAndFormPanel.add(new Icon(c.icon, 18f, c.color.brighter().brighter())));
 
