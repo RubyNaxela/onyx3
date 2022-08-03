@@ -156,22 +156,6 @@ public class Monetary implements Comparable<Monetary> {
     }
 
     /**
-     * Returns this amount with the following format:<br>{@code sX+.XX $}, where:
-     * <ul>
-     *     <li>{@code s} is the character {@code '-'} ({@code \u005cu002d}) if this amount is negative</li>
-     *     <li>{@code X} are decimal digits (the {@code +} means one or more)</li>
-     *     <li>{@code $} is the currenct code returned by {@link #getSymbol}</li>
-     * </ul>
-     * This method is equivalent to calling<br>{@code toString(" PLN")} on this object.
-     *
-     * @return the formatted amount
-     */
-    @Override
-    public String toString() {
-        return toString(" " + getSymbol());
-    }
-
-    /**
      * Returns this amount with the following format:<br>{@code sX+.XX$}, where:
      * <ul>
      *     <li>{@code s} is the character {@code '-'} ({@code \u005cu002d}) if this amount is negative</li>
@@ -198,5 +182,43 @@ public class Monetary implements Comparable<Monetary> {
     @Override
     public int compareTo(@NotNull Monetary other) {
         return Double.compare(toDouble(), other.toDouble());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (units ^ (units >>> 32));
+        result = 31 * result + (int) decimalPlaces;
+        return result;
+    }
+
+    /**
+     * Returns {@code true} if the objects represent the same amount.
+     *
+     * @param other another {@code Monetary} object
+     * @return {@code true} if the objects represent the same amount, {@code false} otherwise
+     */
+    @Override
+    @Contract(value = "null -> false", pure = true)
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (!(other instanceof final Monetary monetary)) return false;
+        if (units != monetary.units) return false;
+        return decimalPlaces == monetary.decimalPlaces;
+    }
+
+    /**
+     * Returns this amount with the following format:<br>{@code sX+.XX $}, where:
+     * <ul>
+     *     <li>{@code s} is the character {@code '-'} ({@code \u005cu002d}) if this amount is negative</li>
+     *     <li>{@code X} are decimal digits (the {@code +} means one or more)</li>
+     *     <li>{@code $} is the currenct code returned by {@link #getSymbol}</li>
+     * </ul>
+     * This method is equivalent to calling<br>{@code toString(" PLN")} on this object.
+     *
+     * @return the formatted amount
+     */
+    @Override
+    public String toString() {
+        return toString(" " + getSymbol());
     }
 }
