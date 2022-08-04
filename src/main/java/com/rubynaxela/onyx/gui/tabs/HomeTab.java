@@ -2,6 +2,8 @@ package com.rubynaxela.onyx.gui.tabs;
 
 import com.rubynaxela.jadeite.awt.JColor;
 import com.rubynaxela.jadeite.awt.graphics.RectangleShape;
+import com.rubynaxela.jadeite.pointers.Pointer;
+import com.rubynaxela.jadeite.util.Pair;
 import com.rubynaxela.onyx.data.Category;
 import com.rubynaxela.onyx.data.Database;
 import com.rubynaxela.onyx.data.Monetary;
@@ -19,8 +21,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Comparator;
-import java.util.Map;
+import java.util.List;
+import java.util.*;
 
 import static com.rubynaxela.jadeite.awt.JGridBagConstraints.gbc;
 
@@ -142,16 +144,33 @@ public class HomeTab extends WindowTab {
         return label;
     }
 
-    private JPanel createChartLegend(@NotNull Map<Category, Monetary> dataset) {
+    private JPanel createChartLegend(@NotNull Map<Category, Monetary> dataset, boolean mergeRefunds) {
         final var panel = new JPanel(new GridLayout(0, 1));
         panel.setBackground(Colors.TRANSPARENT);
-        dataset.entrySet().stream().sorted(Comparator.comparing(e -> e.getValue().negativeAbsolute())).forEach(e -> {
+
+        final SortedMap<Monetary, Pair<Color, String>> data = new TreeMap<>(Comparator.comparing(Monetary::negativeAbsolute));
+        final var refunds = Pointer.to(Monetary.ZERO);
+        final List<JColor> refundsColors = new ArrayList<>();
+        dataset.forEach((c, a) -> {
+            if (!mergeRefunds || !c.incomesAreRedunds) data.put(a, Pair.of(c.color, I18n.getString(c)));
+            else {
+                refunds.set(Monetary.add(refunds.get(), a));
+                refundsColors.add(c.color);
+            }
+        });
+        if (!refunds.get().equals(Monetary.ZERO)) {
+            var refundsColor = JColor.average(refundsColors);
+            refundsColor = refundsColor.withSaturation(Math.max(refundsColor.getSaturation(), 0.5f));
+            data.put(refunds.get(), Pair.of(refundsColor, I18n.getString("label.chart.refunds")));
+        }
+
+        data.forEach((key, value) -> {
             final var colorPreview = new RectangleShape(16, 16);
-            colorPreview.setColor(e.getKey().color);
+            colorPreview.setColor(value.v1);
             final var label = new JLabel();
-            label.setText("<html>" + I18n.getString(e.getKey()) + " :: <span style=\"color:" +
+            label.setText("<html>" + value.v2 + " :: <span style=\"color:" +
                           new JColor(label.getForeground()).withAlpha(0.5f).cssValue() + "\">" +
-                          e.getValue().absolute() + "</span></html>");
+                          key.absolute() + "</span></html>");
             label.setIcon(new ImageIcon(colorPreview.createImage()));
             ComponentUtils.addMargin(label, 2, 0, 2, 0);
             panel.add(label);
@@ -164,7 +183,7 @@ public class HomeTab extends WindowTab {
         final var expensesBreakdownCard = new Card(new GridBagLayout());
         expensesBreakdownCard.add(createChartTitle(I18n.getString("title.chart.expenses_breakdown")));
         expensesBreakdownCard.add(expensesBreakdown, gbc().row(1).weightX(1).weightY(1).fill(GridBagConstraints.BOTH));
-        expensesBreakdownCard.add(createChartLegend(Database.INSTANCE.wGetExpensesByCategory()),
+        expensesBreakdownCard.add(createChartLegend(Database.INSTANCE.wGetExpensesByCategory(), false),
                                   gbc().column(1).height(2).extPaddingLeft(16));
         add(expensesBreakdownCard, gbc().row(3).weightX(1).fill(GridBagConstraints.BOTH)
                                         .extPadding(16, 0, 0, 8));
@@ -172,7 +191,7 @@ public class HomeTab extends WindowTab {
         final var revenuesBreakdownCard = new Card(new GridBagLayout());
         revenuesBreakdownCard.add(createChartTitle(I18n.getString("title.chart.revenues_breakdown")));
         revenuesBreakdownCard.add(revenuesBreakdown, gbc().row(1).weightX(1).weightY(1).fill(GridBagConstraints.BOTH));
-        revenuesBreakdownCard.add(createChartLegend(Database.INSTANCE.wGetRevenuesByCategory()),
+        revenuesBreakdownCard.add(createChartLegend(Database.INSTANCE.wGetRevenuesByCategory(), true),
                                   gbc().row(2).anchor(GridBagConstraints.WEST).extPaddingTop(16));
         add(revenuesBreakdownCard, gbc().position(1, 3).fill(GridBagConstraints.VERTICAL)
                                         .extPadding(16, 8, 0, 0));
